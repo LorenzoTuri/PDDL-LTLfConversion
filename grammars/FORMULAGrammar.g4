@@ -1,8 +1,11 @@
 grammar FORMULAGrammar;
 
+wellformedformula
+	: FORMULA
+	;
 
 SIMPLENAME
-	: ('a'..'z'|'A'..'Z'|'-'|'_')*
+	: ('a'..'z'|'A'..'Z'|'-'|'_')+
 	;
 NUMBER
 	: ('0'..'9')+('.'('0'..'9')+)?
@@ -13,6 +16,7 @@ VARIABLES
 
 CONSTRAINTS
 	: '('CONDITION CONSTRAINTS')'
+	| '('CONSTRAINTS')'
 	| FORMULA
 	;
 CONDITION
@@ -25,7 +29,6 @@ CONDITION
 	| 'always-within'NUMBER CONSTRAINTS
 	| 'hold-during' NUMBER NUMBER
 	| 'hold-after' NUMBER
-	|
 	;
 FORMULA
 	: SIMPLENAME

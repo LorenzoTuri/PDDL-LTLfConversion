@@ -7,6 +7,35 @@
 	<groupId>LorenzoTuri</groupId>
 	<artifactId>PDDLConversion</artifactId>
 	<version>1.0-SNAPSHOT</version>
-
-
+<build>
+	<plugins>
+		<plugin>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr4-maven-plugin</artifactId>
+			<version>4.5</version>
+			<configuration>
+				<listener>false</listener>
+				<visitor>true</visitor>
+				<libDirectory>${basedir}/src/main/antlr4-grammars/imports</libDirectory>
+				<sourceDirectory>${basedir}/src/main/antlr4-grammars</sourceDirectory>
+				<outputDirectory>${basedir}/src/main/java/antlr4_generated</outputDirectory>
+			</configuration>
+			<executions>
+				<execution>
+					<id>antlr</id>
+					<goals>
+						<goal>antlr4</goal>
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+	</plugins>
+</build>
+<dependencies>
+	<dependency>
+		<groupId>org.antlr</groupId>
+		<artifactId>antlr4</artifactId>
+		<version>4.5</version>
+	</dependency>
+</dependencies>
 </project>

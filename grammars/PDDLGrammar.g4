@@ -1,61 +1,58 @@
 grammar PDDLGrammar;
 import FORMULAGrammar,REQUIREMENTSGrammar;
 
-PDDLFile
-	: DEFINEFORMULA TAGREQUIREMENTS? ENDOFFILEFORMULA
+pddlfile
+	: defineformula tagrequirements? ENDOFFILEFORMULA
 	;
-TAGREQUIREMENTS
-	: FORMULAREQUIREMENTS? TAGTYPES
+tagrequirements
+	: formularequirements? tagtypes
 	;
-TAGTYPES
-	: FORMULATYPES? TAGCONSTANTS
+tagtypes
+	: formulatypes? tagconstants
 	;
-TAGCONSTANTS
-	: FORMULACONSTANTS? TAGPREDICATES
+tagconstants
+	: formulaconstants? tagpredicates
 	;
-TAGPREDICATES
-	: FORMULAPREDICATES? TAGCONSTRAINTS
+tagpredicates
+	: formulapredicates? tagconstraints
 	;
-TAGCONSTRAINTS
-	: FORMULACONSTRAINTS? TAGSTRUCTURE
+tagconstraints
+	: formulaconstraints? tagstructure
 	;
-TAGSTRUCTURE
-	: FORMULASTRUCTURE*
+tagstructure
+	: formulastructure+
 	;
 
 
-DEFINEFORMULA
+defineformula
 	: '(define (domain 'SIMPLENAME')'
 	;
-ENDOFFILEFORMULA
-	: ')' EOF
-	;
-FORMULAREQUIREMENTS
+formularequirements
 	: '(:requirements'(':'REQUIREMENTTYPES)+')'
 	;
-FORMULATYPES
+formulatypes
 	: '(:types'(SIMPLENAME)+')'
 	;
-FORMULACONSTANTS
+formulaconstants
 	:'(:costants'(SIMPLENAME ('-'SIMPLENAME)?)+')'
 	;
-FORMULAPREDICATES
+formulapredicates
 	: '(:predicates'(SIMPLENAME (VARIABLES)*)+')'
 	;
-FORMULACONSTRAINTS
+formulaconstraints
 	: '(:constraints'CONSTRAINTS')'
 	;
-FORMULASTRUCTURE
+formulastructure
 	: ACTIONDEFINITION
-	| DERIVEDDEFINITION
-	| DURATIVEACTIONDEFINITION
+//	| DERIVEDDEFINITION         TODO:implement derived-predicates
+//	| DURATIVEACTIONDEFINITION  TODO:implement durative-actions
 	;
 
 ACTIONDEFINITION
 	: '(:action'SIMPLENAME ':parameters('SIMPLENAME*')'ACTIONBODYDEFINITION
 	;
 ACTIONBODYDEFINITION
-	: (':precondition'(PRECOGFORMULA)*)? (':effects'(EFFECTFORMULA)*)?
+	: (':precondition'(PRECOGFORMULA)*)?' '(':effects'(EFFECTFORMULA)*)?
 	;
 PRECOGFORMULA
 	: 'and'PRECOGFORMULA*
@@ -68,15 +65,21 @@ EFFECTFORMULA
 	| EFFECTS
 	;
 EFFECTS
-	: 'forall' '('SIMPLENAME*')' EFFECTFORMULA
-	| 'when'FORMULA CONDEFFECT
-	| 'not' FORMULA
-	| FORMULA
+	: 'forall''('SIMPLENAME*')' EFFECTFORMULA
+	| 'when'FORMULA FINALEFFECTS
+	| FINALEFFECTS
+	;
+FINALEFFECTS
+	: 'not' SIMPLENAME
+	| SIMPLENAME
 	;
 
 
 
 
+ENDOFFILEFORMULA
+	: ')' EOF
+	;
 
 WS : (' ' | '\t' | '\r' | '\n')+ -> skip;
 
