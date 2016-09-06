@@ -6,21 +6,21 @@ import java.util.List;
 /**
  * Created by loren on 05/08/2016.
  */
-public class PDDLComponentFORALL extends PDDLFormula {
+public class Logic_FORALL extends BASE_FORMULA {
 	List<String> simplenames = new ArrayList<String>();
-	PDDLFormula formula;
+	BASE_FORMULA formula;
 
-	public void addFormula(PDDLFormula formula) { this.formula = formula; }
+	public void addFormula(BASE_FORMULA formula) { this.formula = formula; }
 
 	public void addSimplename(String formula){ simplenames.add(formula); }
 
-	public PDDLFormula getFormula() {
+	public BASE_FORMULA getFormula() {
 		return formula;
 	}
 
 	public String getSimplename(int iterator){ return simplenames.get(iterator); }
 
-	public PDDLFormula getFormula(int iterator){ return formula; }
+	public BASE_FORMULA getFormula(int iterator){ return formula; }
 
 	@Override
 	public String toString() {
@@ -28,11 +28,6 @@ public class PDDLComponentFORALL extends PDDLFormula {
 		for (int i=0;i<simplenames.size();i++)result+=simplenames.get(i).toString();
 		if (formula == null) return ""; else result+=")("+formula.toString()+")";
 		return result;
-	}
-
-	@Override
-	public String getFormulaType() {
-		return "forall";
 	}
 
 	@Override

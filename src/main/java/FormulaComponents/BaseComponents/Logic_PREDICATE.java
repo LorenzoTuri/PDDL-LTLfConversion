@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by loren on 05/08/2016.
  */
-public class PDDLComponentPREDICATE extends PDDLFormula {
+public class Logic_PREDICATE extends BASE_FORMULA {
 	String name = "";
 	List<String> variables = new ArrayList<String>();
 
@@ -18,11 +18,6 @@ public class PDDLComponentPREDICATE extends PDDLFormula {
 		String result = name;
 		for (int i =0;i<variables.size();i++) result += " "+variables.get(i).toString();
 		return result;
-	}
-
-	@Override
-	public String getFormulaType() {
-		return "predicate";
 	}
 
 	@Override

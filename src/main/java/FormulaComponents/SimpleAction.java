@@ -1,7 +1,5 @@
 package FormulaComponents;
 
-import PDDLFormulaContainer.Formula;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

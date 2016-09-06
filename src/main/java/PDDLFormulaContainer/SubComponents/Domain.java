@@ -1,13 +1,13 @@
-package PDDLFormulaContainer;
+package PDDLFormulaContainer.SubComponents;
 
 import FormulaComponents.SimpleFormula;
 
 /**
  * Created by loren on 30/07/2016.
  */
-public class DefineFormula extends SimpleFormula {
+public class Domain extends SimpleFormula {
 	String define;
-	public DefineFormula(String s){
+	public Domain(String s){
 		define = s;
 	}
 
@@ -15,4 +15,6 @@ public class DefineFormula extends SimpleFormula {
 	public String toString() {
 		return "Define domain:\n\t"+define;
 	}
+
+	public String getDefine(){return define;}
 }

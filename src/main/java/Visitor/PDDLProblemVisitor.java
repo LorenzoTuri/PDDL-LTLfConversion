@@ -4,10 +4,12 @@ import ANTLRgenerated.PDDLProblemGrammarBaseVisitor;
 import ANTLRgenerated.PDDLProblemGrammarParser;
 import FormulaComponents.BaseComponents.*;
 import PDDLFormulaContainer.*;
+import PDDLFormulaContainer.SubComponents.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Created by loren on 05/09/2016.
+ * Class generated to Visit Problem Definition File in a PDDL Domain.
+ * Should be used in combo with PDDLDomain to generate a complete PDDL translation to java classes
  */
 public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVisitor<SimpleFormula> {
 	@Override
@@ -17,62 +19,63 @@ public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVis
 
 	@Override
 	public SimpleFormula visitPddlproblemfile(PDDLProblemGrammarParser.PddlproblemfileContext ctx) {
+		return visitBody(ctx.body());
+	}
+
+	@Override
+	public SimpleFormula visitBody(PDDLProblemGrammarParser.BodyContext ctx) {
 		PDDLProblem result = new PDDLProblem();
 		result.setProblem((Problem) visitFormulaproblem(ctx.formulaproblem()));
-		result.setDomain((DefineFormula) visitFormuladomain(ctx.formuladomain()));
-		result.setRequirements((RequirementsFormula) visitFormularequirements(ctx.formularequirements()));
-		result.setObjects((ObjectsFormula) visitFormulaobjects(ctx.formulaobjects()));
-		result.setInit((FormulaInit) visitFormulainit(ctx.formulainit()));
-		result.setGoal((GoalFormula) visitFormulagoal(ctx.formulagoal()));
-		//result.setLengthSpec(visitFormulalengthspec(ctx.formulalengthspec()));
+		result.setDomain((Domain) visitFormuladomain(ctx.formuladomain()));
+		if (ctx.formularequirements()!=null)
+			result.setRequirements((Requirements) visitFormularequirements(ctx.formularequirements()));
+		if (ctx.formulaobjects()!=null)
+			result.setObjects((Objects) visitFormulaobjects(ctx.formulaobjects()));
+		result.setInit((Initialization) visitFormulainit(ctx.formulainit()));
+		result.setGoal((Goal) visitFormulagoal(ctx.formulagoal()));
+		//if () result.setLengthSpec(visitFormulalengthspec(ctx.formulalengthspec()));
 		return (SimpleFormula) result;
 	}
 
 	@Override
 	public SimpleFormula visitFormulaproblem(PDDLProblemGrammarParser.FormulaproblemContext ctx) {
-		System.out.println("VISITFORMULA PROBLEM -> "+ctx.SIMPLENAME().toString());
 		return (SimpleFormula) new Problem(ctx.SIMPLENAME().toString());
 	}
 
 	@Override
 	public SimpleFormula visitFormuladomain(PDDLProblemGrammarParser.FormuladomainContext ctx) {
-		System.out.println("VISITFORMULA DOMAIN -> "+ctx.SIMPLENAME().toString());
-		return (SimpleFormula) new DefineFormula(ctx.SIMPLENAME().toString());
+		return (SimpleFormula) new Domain(ctx.SIMPLENAME().toString());
 	}
 
 	@Override
 	public SimpleFormula visitFormularequirements(PDDLProblemGrammarParser.FormularequirementsContext ctx) {
-		System.out.println("VISITFORMULA REQUIREMENTS -> "+ctx.REQUIREMENTTYPES().toString());
-		RequirementsFormula result = new RequirementsFormula();
+		Requirements result = new Requirements();
 		for(TerminalNode t:ctx.REQUIREMENTTYPES()) result.addRequirement(t.toString());
 		return (SimpleFormula) result;
 	}
 
 	@Override
 	public SimpleFormula visitFormulaobjects(PDDLProblemGrammarParser.FormulaobjectsContext ctx) {
-		System.out.println("VISITFORMULA OBJECTS -> "+ctx.SIMPLENAME().toString());
-		ObjectsFormula result = new ObjectsFormula();
+		Objects result = new Objects();
 		for (TerminalNode t:ctx.SIMPLENAME())result.addObject(t.toString());
 		return (SimpleFormula) result;
 	}
 
 	@Override
 	public SimpleFormula visitFormulainit(PDDLProblemGrammarParser.FormulainitContext ctx) {
-		System.out.print("VISITFORMULA INIT -> ");
 
-		FormulaInit result = new FormulaInit();
+		Initialization result = new Initialization();
 		for (int i = 0;i<ctx.initelement().size();i++){
-			System.out.print(visitInitelement(ctx.initelement(i)));
-			result.addInitialization((String) visitInitelement(ctx.initelement(i)));
+			result.addInitialization((Logic_PREDICATE) visitInitelement(ctx.initelement(i)));
 		}
-		System.out.println();
 
 		return (SimpleFormula) result;
 	}
 
 	@Override
 	public SimpleFormula visitInitelement(PDDLProblemGrammarParser.InitelementContext ctx) {
-		return (SimpleFormula) ctx.SIMPLENAME().toString();
+		Logic_PREDICATE result = (Logic_PREDICATE) visitPredicate(ctx.predicate());
+		return (SimpleFormula) result;
 	}
 
 	@Override
@@ -82,53 +85,53 @@ public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVis
 
 	@Override
 	public SimpleFormula visitGoalelement(PDDLProblemGrammarParser.GoalelementContext ctx) {
-		return (SimpleFormula) new GoalFormula((PDDLFormula) visitFormula(ctx.formula()));
+		Goal result = new Goal((BASE_FORMULA) visitFormula(ctx.formula()));
+		return (SimpleFormula) result;
 	}
 
 	@Override
 	public SimpleFormula visitFormula(PDDLProblemGrammarParser.FormulaContext ctx) {
-		PDDLFormula result = null;
+		BASE_FORMULA result;
 		if (ctx.AND()!=null){
 			//la formula può esser scomposta in "and formula*"
-			PDDLComponentAND formula = new PDDLComponentAND();
+			Logic_AND formula = new Logic_AND();
 			for (int i=0;i<ctx.formula().size();i++){
-				PDDLFormula formula2 = (PDDLFormula) visitFormula(ctx.formula(i));
+				BASE_FORMULA formula2 = (BASE_FORMULA) visitFormula(ctx.formula(i));
 				formula.addFormula(formula2);
 			}
 			result = formula;
 		}else if (ctx.OR() != null){
 			//la formula può esser scomposta in "or formula*"
-			PDDLComponentOR formula = new PDDLComponentOR();
+			Logic_OR formula = new Logic_OR();
 			for (int i=0;i<ctx.formula().size();i++){
-				PDDLFormula formula2 = (PDDLFormula) visitFormula(ctx.formula(i));
+				BASE_FORMULA formula2 = (BASE_FORMULA) visitFormula(ctx.formula(i));
 				formula.addFormula(formula2);
 			}
 			result = formula;
 		}else if (ctx.IMPLY() != null){
 			//la formula può esser scomposta in "imply formula formula"
-			PDDLComponentIMPLY formula = new PDDLComponentIMPLY();
-			formula.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
-			formula.addFormula((PDDLFormula) visitFormula(ctx.formula(1)));
+			Logic_IMPLY formula = new Logic_IMPLY();
+			formula.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
+			formula.addFormula((BASE_FORMULA) visitFormula(ctx.formula(1)));
 			result = formula;
 		}else if (ctx.FORALL() != null){
 			//la formula può esser scomposta in "forall Simplename+ formula"
-			PDDLComponentFORALL formula = new PDDLComponentFORALL();
+			Logic_FORALL formula = new Logic_FORALL();
 			for (TerminalNode t:ctx.SIMPLENAME()) formula.addSimplename(t.toString());
-			formula.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
+			formula.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			result = formula;
 		}else if (ctx.NOT() != null){
 			//la formula può esser scomposta in "not formula"
-			PDDLComponentNOT formula = new PDDLComponentNOT();
-			formula.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
+			Logic_NOT formula = new Logic_NOT();
+			formula.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			result = formula;
 		}else if (ctx.predicate() != null){
 			//la formula è un predicato
-			PDDLComponentPREDICATE formula = (PDDLComponentPREDICATE) visitPredicate(ctx.predicate());
-			result = formula;
+			result = (Logic_PREDICATE) visitPredicate(ctx.predicate());
 		}else{
 			//ultimo caso: la formula è semplicemente contornata da parentesi
-			PDDLComponentBRACKETS formula = new PDDLComponentBRACKETS();
-			formula.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
+			Logic_BRACKETS formula = new Logic_BRACKETS();
+			formula.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			result = formula;
 		}
 		return (SimpleFormula) result;
@@ -136,7 +139,7 @@ public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVis
 
 	@Override
 	public SimpleFormula visitPredicate(PDDLProblemGrammarParser.PredicateContext ctx) {
-		PDDLComponentPREDICATE result = new PDDLComponentPREDICATE();
+		Logic_PREDICATE result = new Logic_PREDICATE();
 		result.setName((String) visitName(ctx.name()));
 		for (TerminalNode t:ctx.SIMPLENAME()) result.addVariable(t.toString());
 		return (SimpleFormula) result;

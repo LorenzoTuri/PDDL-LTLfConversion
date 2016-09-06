@@ -1,4 +1,4 @@
-package PDDLFormulaContainer;
+package PDDLFormulaContainer.SubComponents;
 
 import FormulaComponents.SimpleFormula;
 
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by loren on 18/07/2016.
  */
-public class TypesFormula extends SimpleFormula {
+public class Types extends SimpleFormula {
 	List<String> types = new ArrayList<String>();
 
 	@Override
@@ -19,4 +19,6 @@ public class TypesFormula extends SimpleFormula {
 	public void addType(String type){
 		types.add(type);
 	}
+
+	public List<String> getTypes(){return types;}
 }

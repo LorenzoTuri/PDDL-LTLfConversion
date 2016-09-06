@@ -1,4 +1,4 @@
-package PDDLFormulaContainer;
+package PDDLFormulaContainer.SubComponents;
 
 import FormulaComponents.SimpleFormula;
 

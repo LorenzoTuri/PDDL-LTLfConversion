@@ -1,4 +1,4 @@
-package PDDLFormulaContainer;
+package PDDLFormulaContainer.SubComponents;
 
 import FormulaComponents.SimpleAction;
 import FormulaComponents.SimpleFormula;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by loren on 30/07/2016.
  */
-public class StructureFormula extends SimpleFormula {
+public class Structure extends SimpleFormula {
 	List<SimpleAction> actions = new ArrayList<SimpleAction>();
 
 	@Override
@@ -20,4 +20,6 @@ public class StructureFormula extends SimpleFormula {
 	}
 
 	public void addAction(SimpleAction s){actions.add(s);}
+
+	public List<SimpleAction> getActions(){return actions;}
 }

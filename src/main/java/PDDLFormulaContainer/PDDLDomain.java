@@ -1,21 +1,22 @@
 package PDDLFormulaContainer;
 
 import FormulaComponents.SimpleFormula;
+import PDDLFormulaContainer.SubComponents.*;
 
 /**
  * Created by loren on 30/07/2016.
  */
 public class PDDLDomain extends SimpleFormula {
-	DefineFormula define;
-	TypesFormula types;
-	ConstantsFormula constants;
-	PredicatesFormula predicates;
-	RequirementsFormula requirements;
-	StructureFormula structure;
+	Domain domain;
+	Types types;
+	Constants constants;
+	Predicates predicates;
+	Requirements requirements;
+	Structure structure;
 
 	@Override
 	public String toString() {
-		String result = define.toString()+"\n";
+		String result = domain.toString()+"\n";
 		if (types!=null) result += types.toString()+"\n";
 		if (constants!=null) result += constants.toString()+"\n";
 		if (predicates!=null) result += predicates.toString()+"\n";
@@ -24,10 +25,10 @@ public class PDDLDomain extends SimpleFormula {
 		return result;
 	}
 
-	public void setDefine(DefineFormula define){this.define = define;}
-	public void setConstants(ConstantsFormula constants){this.constants=constants;}
-	public void setPredicates(PredicatesFormula predicates){this.predicates=predicates;}
-	public void setRequirements(RequirementsFormula requirements){this.requirements=requirements;}
-	public void setStructure(StructureFormula structure){this.structure=structure;}
-	public void setTypes(TypesFormula types){this.types = types;}
+	public void setDomain(Domain domain){this.domain = domain;}
+	public void setConstants(Constants constants){this.constants=constants;}
+	public void setPredicates(Predicates predicates){this.predicates=predicates;}
+	public void setRequirements(Requirements requirements){this.requirements=requirements;}
+	public void setStructure(Structure structure){this.structure=structure;}
+	public void setTypes(Types types){this.types = types;}
 }

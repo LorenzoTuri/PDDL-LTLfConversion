@@ -1,15 +1,14 @@
-package PDDLFormulaContainer;
+package FormulaComponents;
 
-import FormulaComponents.BaseComponents.PDDLFormula;
-import FormulaComponents.SimpleFormula;
+import FormulaComponents.BaseComponents.BASE_FORMULA;
 
 /**
  * Created by loren on 30/07/2016.
  */
 public class Formula extends SimpleFormula {
-	PDDLFormula formula = null;
-	public void setFormula(PDDLFormula formula){this.formula = formula;}
-	public PDDLFormula getFormula(){return formula;}
+	BASE_FORMULA formula = null;
+	public void setFormula(BASE_FORMULA formula){this.formula = formula;}
+	public BASE_FORMULA getFormula(){return formula;}
 
 	@Override
 	public String toString() {

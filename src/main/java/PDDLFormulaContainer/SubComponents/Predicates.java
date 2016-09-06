@@ -1,4 +1,4 @@
-package PDDLFormulaContainer;
+package PDDLFormulaContainer.SubComponents;
 
 import FormulaComponents.SimpleFormula;
 import FormulaComponents.SimplePredicate;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by loren on 18/07/2016.
  */
-public class PredicatesFormula extends SimpleFormula {
+public class Predicates extends SimpleFormula {
 	List<SimplePredicate> predicates = new ArrayList<SimplePredicate>();
 
 	@Override
@@ -22,4 +22,6 @@ public class PredicatesFormula extends SimpleFormula {
 	public void addPredicate(SimplePredicate pre){
 		predicates.add(pre);
 	}
+
+	public List<SimplePredicate> getPredicates(){return predicates;}
 }

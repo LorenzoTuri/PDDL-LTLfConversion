@@ -86,7 +86,7 @@ formula
 
 LB : '(';
 RB : ')';
-DEFINETAG : 'define';
+DEFINETAG : 'domain';
 DOMAINTAG: 'domain';
 REQUIREMENTTAG: ':requirements';
 TYPETAG: ':types';
@@ -119,7 +119,7 @@ CONDITION_HOLD_AFTER: 'hold-after';
 
 VARIABLE: '?'SIMPLENAME ;
 VARIABLETYPE: ' - 'SIMPLENAME ;
-SIMPLENAME: ('a'..'z'|'A'..'Z'|'-'|'_')+ ;
+SIMPLENAME: ('a'..'z'|'A'..'Z'|'-'|'_')+('a'..'z'|'A'..'Z'|'-'|'_'|'0'..'9')* ;
 NUMBER: ('0'..'9')+ ;
 
 COMMENT:

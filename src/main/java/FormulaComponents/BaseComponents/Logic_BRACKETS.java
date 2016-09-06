@@ -3,13 +3,13 @@ package FormulaComponents.BaseComponents;
 /**
  * Created by loren on 05/08/2016.
  */
-public class PDDLComponentBRACKETS extends PDDLFormula{
-	PDDLFormula formula = null;
-	public void addFormula(PDDLFormula formula) {
+public class Logic_BRACKETS extends BASE_FORMULA {
+	BASE_FORMULA formula = null;
+	public void addFormula(BASE_FORMULA formula) {
 		this.formula = formula;
 	}
 
-	public PDDLFormula getFormula() {
+	public BASE_FORMULA getFormula() {
 		return formula;
 	}
 
@@ -17,11 +17,6 @@ public class PDDLComponentBRACKETS extends PDDLFormula{
 	public String toString() {
 		if (formula==null) return "( )";
 		return "( "+formula.toString()+" )";
-	}
-
-	@Override
-	public String getFormulaType() {
-		return "( )";
 	}
 
 	@Override

@@ -1,14 +1,14 @@
-package PDDLFormulaContainer;
+package PDDLFormulaContainer.SubComponents;
 
-import FormulaComponents.BaseComponents.PDDLFormula;
+import FormulaComponents.BaseComponents.BASE_FORMULA;
 import FormulaComponents.SimpleFormula;
 
 /**
  * Created by loren on 05/09/2016.
  */
-public class GoalFormula extends SimpleFormula {
-	PDDLFormula formula;
-	public GoalFormula(PDDLFormula formula){
+public class Goal extends SimpleFormula {
+	BASE_FORMULA formula;
+	public Goal(BASE_FORMULA formula){
 		this.formula = formula;
 	}
 
@@ -19,4 +19,6 @@ public class GoalFormula extends SimpleFormula {
 	public String toStringLTLf(){
 		return "Goal ->"+formula.toStringLTLf();
 	}
+
+	public BASE_FORMULA getGoal(){return formula;}
 }

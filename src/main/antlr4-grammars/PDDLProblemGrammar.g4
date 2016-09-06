@@ -4,7 +4,10 @@ import REQUIREMENTSGrammar;
 start: pddlproblemfile EOF;
 
 pddlproblemfile:
-	LB DEFINETAG
+	LB DEFINETAG body RB
+	;
+
+body:
 	formulaproblem
 	formuladomain
 	formularequirements?
@@ -13,21 +16,29 @@ pddlproblemfile:
 	formulagoal
 	/*formulaconstraints?
 	formulametricspec?*/
-	formulalengthspec? RB
+	formulalengthspec?
 	;
 
-formulaproblem: LB PROBLEMTAG SIMPLENAME RB;
-formuladomain: LB DOMAINTAG SIMPLENAME RB;
-formularequirements: LB REQUIREMENTTAG (REQUIREMENTTYPES)+ RB;
-formulaobjects: LB OBJECTSTAG SIMPLENAME+ RB;
-formulainit: LB INITTAG initelement* RB;
-formulagoal: LB GOALTAG goalelement RB;
-formulalengthspec: LB LENGTHSPECTAG lengthspecserial? lengthspecparallel? RB {System.out.println("THE USE OF LENGTHSPEC IS DEPRECATED SINCE PDDL 2.1...\nit is yet implemented but no guarantee it is gonna work properly");};
+formulaproblem:
+	LB PROBLEMTAG SIMPLENAME RB;
+formuladomain:
+	LB DOMAINTAG SIMPLENAME RB;
+formularequirements:
+	LB REQUIREMENTTAG (REQUIREMENTTYPES)+ RB;
+formulaobjects:
+	LB OBJECTSTAG SIMPLENAME+ RB;
+formulainit:
+	LB INITTAG initelement* RB;
+formulagoal:
+	LB GOALTAG goalelement RB;
+formulalengthspec:
+	LB LENGTHSPECTAG lengthspecserial? lengthspecparallel? RB {System.out.println("THE USE OF LENGTHSPEC IS DEPRECATED SINCE PDDL 2.1...\nit is yet implemented but no guarantee it is gonna work properly");};
 
-initelement: SIMPLENAME
+initelement: predicate
 	/*| 'at' NUMBER SIMPLENAME
 	| LB '=' functionterm NUMBER RB
 	| LB '=' functionterm SIMPLENAME RB*/;
+
 goalelement: formula;
 
 formula: predicate
@@ -40,7 +51,7 @@ formula: predicate
 	| LB FORALL LB SIMPLENAME+ RB formula RB
 	;
 
-predicate: LB name ('?'SIMPLENAME)+ RB;
+predicate: LB name ('?'?SIMPLENAME)+ RB;
 name: SIMPLENAME;
 
 lengthspecserial: LB SERIALTAG NUMBER RB;
@@ -48,7 +59,7 @@ lengthspecparallel: LB PARALLELTAG NUMBER RB;
 
 LB : '(';
 RB : ')';
-DEFINETAG: 'define';
+DEFINETAG: 'domain';
 PROBLEMTAG: 'problem';
 DOMAINTAG: ':domain';
 REQUIREMENTTAG: ':requirements';
@@ -60,13 +71,13 @@ SERIALTAG: ':serial';
 PARALLELTAG: ':parallel';
 
 AND: 'and';
-FORALL: 'forall';
-NOT: 'not';
 OR: 'or';
+NOT: 'not';
+FORALL: 'forall';
 IMPLY: 'imply';
 
-SIMPLENAME: ('a'..'z'|'A'..'Z'|'-'|'_')+ ;
 NUMBER: ('0'..'9')+ ;
+SIMPLENAME: ('a'..'z'|'A'..'Z')+ ('a'..'z'|'A'..'Z'|'-'|'_'|'0'..'9')* ;
 
 COMMENT:
     (('//'('a'..'z'|'A'..'Z'|'('|')'|'-'|'_'|'0'..'9'|'.'|','|';'|':'|' '|'\t')*'\n')

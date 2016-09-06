@@ -3,10 +3,12 @@ package Visitor;
 import ANTLRgenerated.PDDLDomainGrammarBaseVisitor;
 import ANTLRgenerated.PDDLDomainGrammarParser.*;
 import FormulaComponents.BaseComponents.*;
+import FormulaComponents.Formula;
 import FormulaComponents.SimpleAction;
 import FormulaComponents.SimplePredicate;
 import FormulaComponents.SimpleVariable;
 import PDDLFormulaContainer.*;
+import PDDLFormulaContainer.SubComponents.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
@@ -21,27 +23,27 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 	@Override
 	public SimpleFormula visitPddlfile(PddlfileContext ctx) {
 		PDDLDomain formula = new PDDLDomain();
-		formula.setDefine((DefineFormula) visitFormuladefine(ctx.formuladefine()));
+		formula.setDomain((Domain) visitFormuladefine(ctx.formuladefine()));
 		if (ctx.formularequirements()!=null)
-			formula.setRequirements((RequirementsFormula) visitFormularequirements(ctx.formularequirements()));
+			formula.setRequirements((Requirements) visitFormularequirements(ctx.formularequirements()));
 		if (ctx.formulatypes()!=null)
-			formula.setTypes((TypesFormula) visitFormulatypes(ctx.formulatypes()));
+			formula.setTypes((Types) visitFormulatypes(ctx.formulatypes()));
 		if (ctx.formulaconstants()!=null)
-			formula.setConstants((ConstantsFormula) visitFormulaconstants(ctx.formulaconstants()));
+			formula.setConstants((Constants) visitFormulaconstants(ctx.formulaconstants()));
 		if (ctx.formulapredicates()!=null)
-			formula.setPredicates((PredicatesFormula) visitFormulapredicates(ctx.formulapredicates()));
-		formula.setStructure((StructureFormula) visitFormulastructure(ctx.formulastructure()));
+			formula.setPredicates((Predicates) visitFormulapredicates(ctx.formulapredicates()));
+		formula.setStructure((Structure) visitFormulastructure(ctx.formulastructure()));
 		return (SimpleFormula) formula;
 	}
 
 	@Override
 	public SimpleFormula visitFormuladefine(FormuladefineContext ctx) {
-		return (SimpleFormula) new DefineFormula(ctx.SIMPLENAME().toString());
+		return (SimpleFormula) new Domain(ctx.SIMPLENAME().toString());
 	}
 
 	@Override
 	public SimpleFormula visitFormularequirements(FormularequirementsContext ctx) {
-		RequirementsFormula r = new RequirementsFormula();
+		Requirements r = new Requirements();
 		for (TerminalNode n:ctx.REQUIREMENTTYPES()) {
 			r.addRequirement(n.getText());
 			System.out.println(n.getText());
@@ -51,7 +53,7 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 
 	@Override
 	public SimpleFormula visitFormulatypes(FormulatypesContext ctx) {
-		TypesFormula t = new TypesFormula();
+		Types t = new Types();
 		for (TerminalNode n:ctx.SIMPLENAME()){
 			t.addType(n.getText());
 			System.out.println(n.getText());
@@ -61,7 +63,7 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 
 	@Override
 	public SimpleFormula visitFormulaconstants(FormulaconstantsContext ctx) {
-		ConstantsFormula c = new ConstantsFormula();
+		Constants c = new Constants();
 		for (int i = 0;i<ctx.variables().size();i++){
 			SimpleVariable con = (SimpleVariable) visitVariables(ctx.variables(i));
 			c.addConstant(con);
@@ -78,7 +80,7 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 
 	@Override
 	public SimpleFormula visitFormulapredicates(FormulapredicatesContext ctx) {
-		PredicatesFormula p = new PredicatesFormula();
+		Predicates p = new Predicates();
 		for(int i = 0;i<ctx.supportTagPredicates().size();i++){
 			p.addPredicate((SimplePredicate) visitSupportTagPredicates(ctx.supportTagPredicates().get(i)));
 		}
@@ -101,7 +103,7 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 
 	@Override
 	public SimpleFormula visitFormulastructure(FormulastructureContext ctx) {
-		StructureFormula structure = new StructureFormula();
+		Structure structure = new Structure();
 		for (ActiondefinitionContext n:ctx.actiondefinition()) {
 			SimpleAction action = (SimpleAction) visitActiondefinition(n);
 			structure.addAction(action);
@@ -138,74 +140,74 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 	@Override
 	public SimpleFormula visitPreconditiondefinition(PreconditiondefinitionContext ctx) {
 		Formula formula = new Formula();
-		formula.setFormula((PDDLFormula) visitFormula(ctx.formula()));
+		formula.setFormula((BASE_FORMULA) visitFormula(ctx.formula()));
 		return (SimpleFormula) formula;
 	}
 
 	@Override
 	public SimpleFormula visitEffectsdefinition(EffectsdefinitionContext ctx) {
 		Formula formula = new Formula();
-		formula.setFormula((PDDLFormula) visitFormula(ctx.formula()));
+		formula.setFormula((BASE_FORMULA) visitFormula(ctx.formula()));
 		return (SimpleFormula) formula;
 	}
 
 	@Override
 	public SimpleFormula visitFormula(FormulaContext ctx) {
-		PDDLFormula formula = null;
+		BASE_FORMULA formula = null;
 
 		if (ctx.LOGIC_NOT()!=null){
-			PDDLComponentNOT not = new PDDLComponentNOT();
-			not.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
+			Logic_NOT not = new Logic_NOT();
+			not.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			formula = not;
 
 		}else if (ctx.LOGIC_AND()!=null){
-			PDDLComponentAND and = new PDDLComponentAND();
-			for (int i =0;i<ctx.formula().size();i++) and.addFormula((PDDLFormula) visitFormula(ctx.formula(i)));
+			Logic_AND and = new Logic_AND();
+			for (int i =0;i<ctx.formula().size();i++) and.addFormula((BASE_FORMULA) visitFormula(ctx.formula(i)));
 			formula = and;
 
 		}else if (ctx.LOGIC_EQUALS()!=null) {
-			PDDLComponentEQUALS equals = new PDDLComponentEQUALS();
-			equals.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
-			equals.addFormula((PDDLFormula) visitFormula(ctx.formula(1)));
+			Logic_EQUALS equals = new Logic_EQUALS();
+			equals.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
+			equals.addFormula((BASE_FORMULA) visitFormula(ctx.formula(1)));
 			formula = equals;
 
 		}else if (ctx.LOGIC_OR()!=null){
-			PDDLComponentOR or = new PDDLComponentOR();
-			for (int i =0;i<ctx.formula().size();i++) or.addFormula((PDDLFormula) visitFormula(ctx.formula(i)));
+			Logic_OR or = new Logic_OR();
+			for (int i =0;i<ctx.formula().size();i++) or.addFormula((BASE_FORMULA) visitFormula(ctx.formula(i)));
 			formula = or;
 
 		}else if (ctx.LOGIC_IMPLY()!=null){
-			PDDLComponentIMPLY imply = new PDDLComponentIMPLY();
-			imply.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
-			imply.addFormula((PDDLFormula) visitFormula(ctx.formula(1)));
+			Logic_IMPLY imply = new Logic_IMPLY();
+			imply.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
+			imply.addFormula((BASE_FORMULA) visitFormula(ctx.formula(1)));
 			formula = imply;
 
 		}else if (ctx.LOGIC_WHEN()!=null){
-			PDDLComponentWHEN when = new PDDLComponentWHEN();
-			when.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
-			when.addFormula((PDDLFormula) visitFormula(ctx.formula(1)));
+			Logic_WHEN when = new Logic_WHEN();
+			when.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
+			when.addFormula((BASE_FORMULA) visitFormula(ctx.formula(1)));
 			formula = when;
 
 		}else if (ctx.LOGIC_FORALL()!=null){
-			PDDLComponentFORALL forall = new PDDLComponentFORALL();
+			Logic_FORALL forall = new Logic_FORALL();
 			for (TerminalNode t:ctx.SIMPLENAME()) forall.addSimplename(t.getText());
-			forall.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
+			forall.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			formula = forall;
 
 		} else if (ctx.predicate() != null){
-			PDDLComponentPREDICATE predicate = new PDDLComponentPREDICATE();
+			Logic_PREDICATE predicate = new Logic_PREDICATE();
 			predicate.setName(ctx.predicate().SIMPLENAME().toString());
 			for (VariablesContext vc:ctx.predicate().variables())
 				predicate.addVariable(vc.getText().substring(1,vc.getText().length()));
 			formula = predicate;
 
 		}else if (ctx.LB()!=null) {
-			PDDLComponentBRACKETS brackets = new PDDLComponentBRACKETS();
-			brackets.addFormula((PDDLFormula) visitFormula(ctx.formula(0)));
+			Logic_BRACKETS brackets = new Logic_BRACKETS();
+			brackets.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			formula = brackets;
 
 		}else if (ctx.SIMPLENAME()!=null){
-			PDDLComponentNAME name = new PDDLComponentNAME();
+			Logic_NAME name = new Logic_NAME();
 			name.setName(ctx.SIMPLENAME(0).toString());
 			formula = name;
 

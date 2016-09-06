@@ -1,34 +1,47 @@
 package PDDLFormulaContainer;
 
 import FormulaComponents.SimpleFormula;
+import PDDLFormulaContainer.SubComponents.*;
 
 /**
  * Created by loren on 02/08/2016.
  */
 public class PDDLProblem extends SimpleFormula{
 	Problem problem = null;
-	DefineFormula domain = null;
-	RequirementsFormula requirements = null;
-	ObjectsFormula objects = null;
-	FormulaInit init = null;
-	GoalFormula goal = null;
+	Domain domain = null;
+	Requirements requirements = null;
+	Objects objects = null;
+	Initialization init = null;
+	Goal goal = null;
 
 	public void setProblem(Problem p){
 		problem = p;
 	}
-	public void setDomain(DefineFormula d){
+	public void setDomain(Domain d){
 		domain = d;
 	}
-	public void setRequirements(RequirementsFormula r){
+	public void setRequirements(Requirements r){
 		requirements = r;
 	}
-	public void setObjects(ObjectsFormula o){
+	public void setObjects(Objects o){
 		objects = o;
 	}
-	public void setInit(FormulaInit i){
+	public void setInit(Initialization i){
 		init = i;
 	}
-	public void setGoal(GoalFormula g){
+	public void setGoal(Goal g){
 		goal = g;
+	}
+
+	@Override
+	public String toString() {
+		String result = "";
+		if (problem!=null) result+= problem+"\n";
+		if (domain!=null) result+= domain+"\n";
+		if (requirements!=null) result+=requirements+"\n";
+		if (objects!=null) result+=objects+"\n";
+		if (init!=null) result+=init+"\n";
+		if (goal!=null) result+=goal;
+		return result;
 	}
 }
