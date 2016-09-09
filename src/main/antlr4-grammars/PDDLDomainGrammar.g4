@@ -86,7 +86,7 @@ formula
 
 LB : '(';
 RB : ')';
-DEFINETAG : 'domain';
+DEFINETAG : 'define';
 DOMAINTAG: 'domain';
 REQUIREMENTTAG: ':requirements';
 TYPETAG: ':types';

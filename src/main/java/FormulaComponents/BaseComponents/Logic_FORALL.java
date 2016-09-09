@@ -1,5 +1,7 @@
 package FormulaComponents.BaseComponents;
 
+import FormulaComponents.SimplePredicate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +46,10 @@ public class Logic_FORALL extends BASE_FORMULA {
 
 		}
 		return result;
+	}
+
+	@Override
+	public List<SimplePredicate> getPredicates() {
+		return formula.getPredicates();
 	}
 }

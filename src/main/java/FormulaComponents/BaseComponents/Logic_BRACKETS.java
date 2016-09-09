@@ -1,5 +1,9 @@
 package FormulaComponents.BaseComponents;
 
+import FormulaComponents.SimplePredicate;
+
+import java.util.List;
+
 /**
  * Created by loren on 05/08/2016.
  */
@@ -23,5 +27,10 @@ public class Logic_BRACKETS extends BASE_FORMULA {
 	public String toStringLTLf() {
 		if (formula==null) return "( )";
 		return "( "+formula.toStringLTLf()+" )";
+	}
+
+	@Override
+	public List<SimplePredicate> getPredicates() {
+		return formula.getPredicates();
 	}
 }

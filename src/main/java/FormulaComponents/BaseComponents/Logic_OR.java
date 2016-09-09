@@ -1,5 +1,7 @@
 package FormulaComponents.BaseComponents;
 
+import FormulaComponents.SimplePredicate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,5 +29,12 @@ public class Logic_OR extends BASE_FORMULA {
 		String result = "("+formulas.get(0).toStringLTLf()+")";
 		for (int i=1;i<formulas.size();i++) result+=" || ("+formulas.get(i).toStringLTLf()+")";
 		return result;
+	}
+
+	@Override
+	public List<SimplePredicate> getPredicates() {
+		ArrayList<SimplePredicate> predicates = new ArrayList<SimplePredicate>();
+		for (BASE_FORMULA formula:formulas) predicates.addAll(formula.getPredicates());
+		return predicates;
 	}
 }

@@ -1,4 +1,4 @@
-(domain (domain wumpus-a)
+(define (domain wumpus-a)
   (:requirements :strips)
   (:predicates
    (adj ?square-1 ?square-2)

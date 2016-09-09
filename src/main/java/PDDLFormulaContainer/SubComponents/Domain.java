@@ -6,15 +6,15 @@ import FormulaComponents.SimpleFormula;
  * Created by loren on 30/07/2016.
  */
 public class Domain extends SimpleFormula {
-	String define;
+	String domain;
 	public Domain(String s){
-		define = s;
+		domain = s;
 	}
 
 	@Override
 	public String toString() {
-		return "Define domain:\n\t"+define;
+		return "Define domain:\n\t"+ domain;
 	}
 
-	public String getDefine(){return define;}
+	public String getDomain(){return domain;}
 }

@@ -13,11 +13,11 @@ public class WrongDomainException extends Exception {
 
 	@Override
 	public String getLocalizedMessage() {
-		return "Domains do not match -> 1:"+first+", 2:"+second;
+		return "Domains do not match -> 1:["+first+"], 2:["+second+"]";
 	}
 
 	@Override
 	public String getMessage() {
-		return "The two input domain are different -> 1:"+first+", 2:"+second;
+		return "The two input domain are different -> 1:["+first+"], 2:["+second+"]";
 	}
 }

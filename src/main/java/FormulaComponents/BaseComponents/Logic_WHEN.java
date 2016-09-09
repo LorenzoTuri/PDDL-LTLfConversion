@@ -1,5 +1,9 @@
 package FormulaComponents.BaseComponents;
 
+import FormulaComponents.SimplePredicate;
+
+import java.util.List;
+
 /**
  * Created by loren on 05/08/2016.
  */
@@ -32,5 +36,12 @@ public class Logic_WHEN extends BASE_FORMULA {
 	@Override
 	public String toStringLTLf() {
 		return "("+formula1.toStringLTLf()+") -> ("+formula2.toStringLTLf()+")";
+	}
+
+	@Override
+	public List<SimplePredicate> getPredicates() {
+		List<SimplePredicate> predicates = formula1.getPredicates();
+		predicates.addAll(formula2.getPredicates());
+		return null;
 	}
 }

@@ -132,7 +132,9 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 	public SimpleFormula visitParametersdefinition(ParametersdefinitionContext ctx) {
 		SimpleAction action = new SimpleAction();
 		for (TerminalNode t:ctx.VARIABLE()) {
-			action.addParameter(t.getText().substring(1,t.getText().length()));
+			String temp = t.getText().substring(1,t.getText().length());
+			temp = temp.replace("//s+","");
+			action.addParameter(temp);
 		}
 		return (SimpleFormula) action;
 	}
@@ -197,8 +199,11 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 		} else if (ctx.predicate() != null){
 			Logic_PREDICATE predicate = new Logic_PREDICATE();
 			predicate.setName(ctx.predicate().SIMPLENAME().toString());
-			for (VariablesContext vc:ctx.predicate().variables())
-				predicate.addVariable(vc.getText().substring(1,vc.getText().length()));
+			for (VariablesContext vc:ctx.predicate().variables()) {
+				String temp = vc.getText().substring(1,vc.getText().length());
+				temp = temp.replace("//s+","");
+				predicate.addVariable(temp);
+			}
 			formula = predicate;
 
 		}else if (ctx.LB()!=null) {
@@ -221,7 +226,7 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 		String result = "";
 		result+="( "+ctx.SIMPLENAME().getText();
 		for(int i=0;i<ctx.variables().size();i++){
-			result+=" "+ctx.variables(i).getText();
+			result+=" "+ctx.variables(i).getText().replace("//s+","");
 		}
 		result+=" )";
 		return (SimpleFormula) result;

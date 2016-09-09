@@ -1,5 +1,9 @@
 package FormulaComponents.BaseComponents;
 
+import FormulaComponents.SimplePredicate;
+
+import java.util.List;
+
 /**
  * Created by loren on 05/08/2016.
  */
@@ -35,5 +39,12 @@ public class Logic_EQUALS extends BASE_FORMULA {
 		String result = "(("+formula1.toStringLTLf()+") && ("+formula2.toStringLTLf()+"))";
 		result+= "&& (!("+formula1.toStringLTLf()+") && !("+formula2.toStringLTLf()+"))";
 		return result;
+	}
+
+	@Override
+	public List<SimplePredicate> getPredicates() {
+		List<SimplePredicate> predicates = formula1.getPredicates();
+		predicates.addAll(formula2.getPredicates());
+		return predicates;
 	}
 }

@@ -23,9 +23,14 @@ public class SimpleAction {
 				"\tLTLf effects: "+effects.toStringLTLf();
 	}
 
-	public void setName(String name){this.name = name;}
-	public void addParameter(String variable){parameters.add(variable);}
-	public void addAllParameter(Collection<String> variable){parameters.addAll(variable);}
+	public void setName(String name){this.name = name.replace("//s+","");}
+	public void addParameter(String variable){parameters.add(variable.replace("//s+",""));}
+	public void addAllParameter(Collection<String> variable){
+		for (String s:variable) {
+			s = s.replace("//s+", "");
+			parameters.add(s);
+		}
+	}
 	public void setPreconditions(Formula preconditions){this.preconditions = preconditions;}
 	public void setEffects(Formula effects){this.effects = effects;}
 

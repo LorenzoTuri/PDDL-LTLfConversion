@@ -14,4 +14,7 @@ public class SimplePredicate {
 	public String toString() {
 		return name+" "+variables.toString();
 	}
+
+	public int getVariableCount(){return variables.size();}
+	public String getName(){return name;}
 }
