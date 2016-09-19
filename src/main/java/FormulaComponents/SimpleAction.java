@@ -9,32 +9,28 @@ import java.util.List;
  */
 public class SimpleAction {
 	String name;
-	List<String> parameters = new ArrayList<String>();
+	List<SimpleVariable> parameters = new ArrayList<SimpleVariable>();
 	Formula preconditions;
 	Formula effects;
 
 	@Override
 	public String toString() {
-		return "action name: "+name+"\n"+
-				"\tparam: "+parameters.toString()+"\n"+
-				"\tPDDL precondition: "+preconditions+"\n"+
-				"\tLTLf precondition: "+preconditions.toStringLTLf()+"\n"+
-				"\tPDDL effects: "+effects+"\n"+
-				"\tLTLf effects: "+effects.toStringLTLf();
+		return "Action name: "+name+"\n"+
+				"\tParams: "+parameters.toString()+"\n"+
+				"\tPrecondition: "+preconditions+"\n"+
+				"\tEffects: "+effects+"\n";
 	}
 
 	public void setName(String name){this.name = name.replace("//s+","");}
-	public void addParameter(String variable){parameters.add(variable.replace("//s+",""));}
-	public void addAllParameter(Collection<String> variable){
-		for (String s:variable) {
-			s = s.replace("//s+", "");
-			parameters.add(s);
-		}
+	public void addParameter(SimpleVariable variable){parameters.add(variable);}
+	public void addAllParameter(Collection<SimpleVariable> variable){
+		parameters.addAll(variable);
 	}
 	public void setPreconditions(Formula preconditions){this.preconditions = preconditions;}
 	public void setEffects(Formula effects){this.effects = effects;}
+	public String getName() {return name;}
 
-	public Collection<String> getParameters(){return parameters;}
+	public Collection<SimpleVariable> getParameters(){return parameters;}
 	public Formula getPreconditions(){return preconditions;}
 	public Formula getEffects(){return effects;}
 }

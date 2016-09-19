@@ -20,8 +20,4 @@ public class Formula extends SimpleFormula {
 		if (formula == null) return "";
 		return formula.toString();
 	}
-	public String toStringLTLf(){
-		if (formula == null) return "";
-		return formula.toStringLTLf();
-	}
 }

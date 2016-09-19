@@ -1,0 +1,35 @@
+(define
+(domain double-murphy)
+(:predicates
+	(isvacuum ?vacuum)
+	(isplace ?place)
+	(isdirty ?place)
+	(ison ?who ?where)
+)
+(:action move
+	:parameters (?from ?where ?who)
+	:precondition (and
+		(isplace ?from)
+		(isplace ?where)
+		(isvacuum ?who)
+		(ison ?who ?from)
+	)
+	:effect (and
+		(not(ison ?who ?from))
+		(ison ?who ?where)
+		(or (isdirty ?where) (not (isdirty ?where) ) )
+	)
+)
+(:action clean
+	:parameters (?who ?where)
+	:precondition (and
+		(isvacuum ?who)
+		(isplace ?where)
+		(ison ?who ?where)
+	)
+	:effect (and
+		(IMPLY (isdirty ?where) (not(isdirty ?where)))
+		(IMPLY (not(isdirty ?where)) (isdirty ?where))
+	)
+)
+)

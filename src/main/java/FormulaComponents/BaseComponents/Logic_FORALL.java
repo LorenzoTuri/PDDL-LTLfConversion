@@ -4,6 +4,7 @@ import FormulaComponents.SimplePredicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by loren on 05/08/2016.
@@ -33,12 +34,12 @@ public class Logic_FORALL extends BASE_FORMULA {
 	}
 
 	@Override
-	public String toStringLTLf() {
+	public String toStringLTLf(Map<SimplePredicate,String> map) {
 		String result = "";
 		if (formula == null) {
-			result+="( "+simplenames.get(0)+" -> "+formula.toStringLTLf()+" )";
+			result+="( "+simplenames.get(0)+" -> "+formula.toStringLTLf(map)+" )";
 			for (int i = 1; i < simplenames.size(); i++)
-				result += "&& (" + simplenames.get(i) + " -> " + formula.toStringLTLf() + ")";
+				result += "&& (" + simplenames.get(i) + " -> " + formula.toStringLTLf(map) + ")";
 		}else{
 			result+="( "+simplenames.get(0)+" -> true )";
 			for (int i = 1; i < simplenames.size(); i++)

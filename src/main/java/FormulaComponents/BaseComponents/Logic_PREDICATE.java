@@ -5,6 +5,7 @@ import FormulaComponents.SimpleVariable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by loren on 05/08/2016.
@@ -13,8 +14,7 @@ public class Logic_PREDICATE extends BASE_FORMULA {
 	SimplePredicate predicate = new SimplePredicate();
 
 	public void setName(String name){predicate.name = name;}
-	public void addVariable(String var){
-		SimpleVariable variable = new SimpleVariable(var.replace("//s+",""),null);
+	public void addVariable(SimpleVariable variable){
 		predicate.variables.add(variable);
 	}
 
@@ -26,10 +26,8 @@ public class Logic_PREDICATE extends BASE_FORMULA {
 	}
 
 	@Override
-	public String toStringLTLf() {
-		String result = "name_"+predicate.name+"_var_";
-		for (int i=0;i<predicate.variables.size();i++) result+="_"+predicate.variables.get(i);
-		return result;
+	public String toStringLTLf(Map<SimplePredicate,String> map) {
+		return map.get(predicate);
 	}
 
 	@Override

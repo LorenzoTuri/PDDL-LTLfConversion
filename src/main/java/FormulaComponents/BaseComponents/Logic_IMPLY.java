@@ -3,6 +3,7 @@ package FormulaComponents.BaseComponents;
 import FormulaComponents.SimplePredicate;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by loren on 05/08/2016.
@@ -34,9 +35,9 @@ public class Logic_IMPLY extends BASE_FORMULA {
 	}
 
 	@Override
-	public String toStringLTLf() {
+	public String toStringLTLf(Map<SimplePredicate,String> map) {
 		if (formula1==null || formula2 == null) return "";
-		return "("+formula1.toStringLTLf()+") -> ("+formula2.toStringLTLf()+")";
+		return "("+formula1.toStringLTLf(map)+") -> ("+formula2.toStringLTLf(map)+")";
 	}
 
 	@Override

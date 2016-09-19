@@ -98,14 +98,14 @@ PARAMETERSTAG: ':parameters';
 PRECONDITIONTAG: ':precondition';
 EFFECTTAG: ':effect';
 
-LOGIC_NOT: 'not';
+LOGIC_NOT: 'not' | 'NOT';
 LOGIC_EQUALS: '=';
-LOGIC_AND: 'and';
-LOGIC_OR: 'or';
-LOGIC_IMPLY: 'imply';
-//LOGIC_EXISTS: 'exists';
-LOGIC_FORALL: 'forall';
-LOGIC_WHEN: 'when';
+LOGIC_AND: 'and' | 'AND';
+LOGIC_OR: 'or' | 'OR';
+LOGIC_IMPLY: 'imply' | 'IMPLY';
+//LOGIC_EXISTS: 'exists' | 'EXISTS';
+LOGIC_FORALL: 'forall' | 'FORALL';
+LOGIC_WHEN: 'when' | 'WHEN';
 
 CONDITION_ALWAYS: 'always';
 CONDITION_SOMETIME: 'sometime';

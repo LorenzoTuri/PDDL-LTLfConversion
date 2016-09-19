@@ -11,8 +11,8 @@ import java.util.List;
 public class NonExistentParameterException extends Exception {
 	SimplePredicate predicate;
 	SimpleVariable var;
-	List<String> list;
-	public NonExistentParameterException(SimplePredicate predicate, SimpleVariable var, List<String> list){
+	List<SimpleVariable> list;
+	public NonExistentParameterException(SimplePredicate predicate, SimpleVariable var, List<SimpleVariable> list){
 		this.predicate = predicate;
 		this.var = var;
 		this.list = list;

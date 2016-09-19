@@ -3,6 +3,7 @@ package FormulaComponents.BaseComponents;
 import FormulaComponents.SimplePredicate;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by loren on 05/08/2016.
@@ -24,9 +25,9 @@ public class Logic_BRACKETS extends BASE_FORMULA {
 	}
 
 	@Override
-	public String toStringLTLf() {
+	public String toStringLTLf(Map<SimplePredicate,String> map) {
 		if (formula==null) return "( )";
-		return "( "+formula.toStringLTLf()+" )";
+		return "( "+formula.toStringLTLf(map)+" )";
 	}
 
 	@Override

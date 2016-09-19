@@ -16,9 +16,6 @@ public class Goal extends SimpleFormula {
 	public String toString() {
 		return "Goal ->"+formula.toString();
 	}
-	public String toStringLTLf(){
-		return "Goal ->"+formula.toStringLTLf();
-	}
 
 	public BASE_FORMULA getGoal(){return formula;}
 }

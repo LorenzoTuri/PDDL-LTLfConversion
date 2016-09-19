@@ -4,6 +4,7 @@ import Exceptions.NonExistentParameterException;
 import Exceptions.NonExistentPredicateException;
 import Exceptions.RequirementException;
 import Exceptions.WrongDomainException;
+import PDDLFormulaContainer.LTLfWorldDescription;
 import PDDLFormulaContainer.PDDLDomain;
 import PDDLFormulaContainer.PDDLProblem;
 import PDDLFormulaContainer.PDDLWorldDescription;
@@ -27,10 +28,18 @@ public class main {
 		PDDLProblem problem = problemVisit.visit();
 
 		PDDLWorldDescription world = new PDDLWorldDescription(domain,problem);
+		System.out.println("\n"+world);
+
+		LTLfWorldDescription ltlfWorld = world.toLTLfFormula();
+		System.out.println("ACTION\t"+ltlfWorld.getActionsFormula());
+		System.out.println("AGENT\t"+ltlfWorld.getAgentRuleFormula());
+		System.out.println("GOAL\t"+ltlfWorld.getGoalFormula());
+		System.out.println("INIT\t"+ltlfWorld.getInitFormula());
+		System.out.println("WORLD\t"+ltlfWorld.getWorldRulesFormula());
 	}
 
 	public static void main(String[] args){
-		try{new main("PDDLExampleDomainFormula.txt", "PDDLExampleProblemFormula.txt");}
+		try{new main("PDDLdoubleMurphyDomainFormula.txt", "PDDLdoubleMurphyProblemFormula.txt");}
 		catch (Exception e){e.printStackTrace();}
 	}
 }

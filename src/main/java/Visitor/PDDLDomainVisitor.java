@@ -134,7 +134,7 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 		for (TerminalNode t:ctx.VARIABLE()) {
 			String temp = t.getText().substring(1,t.getText().length());
 			temp = temp.replace("//s+","");
-			action.addParameter(temp);
+			action.addParameter(new SimpleVariable(temp,null));
 		}
 		return (SimpleFormula) action;
 	}
@@ -201,8 +201,8 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 			predicate.setName(ctx.predicate().SIMPLENAME().toString());
 			for (VariablesContext vc:ctx.predicate().variables()) {
 				String temp = vc.getText().substring(1,vc.getText().length());
-				temp = temp.replace("//s+","");
-				predicate.addVariable(temp);
+				SimpleVariable simpleVariable = new SimpleVariable(temp.replace("//s+",""),null);
+				predicate.addVariable(simpleVariable);
 			}
 			formula = predicate;
 

@@ -4,6 +4,7 @@ import FormulaComponents.SimplePredicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by loren on 05/08/2016.
@@ -25,9 +26,9 @@ public class Logic_OR extends BASE_FORMULA {
 	}
 
 	@Override
-	public String toStringLTLf() {
-		String result = "("+formulas.get(0).toStringLTLf()+")";
-		for (int i=1;i<formulas.size();i++) result+=" || ("+formulas.get(i).toStringLTLf()+")";
+	public String toStringLTLf(Map<SimplePredicate,String> map) {
+		String result = "("+formulas.get(0).toStringLTLf(map)+")";
+		for (int i=1;i<formulas.size();i++) result+=" || ("+formulas.get(i).toStringLTLf(map)+")";
 		return result;
 	}
 

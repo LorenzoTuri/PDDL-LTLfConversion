@@ -26,7 +26,7 @@ formuladomain:
 formularequirements:
 	LB REQUIREMENTTAG (REQUIREMENTTYPES)+ RB;
 formulaobjects:
-	LB OBJECTSTAG SIMPLENAME+ RB;
+	LB OBJECTSTAG (variable)+ RB;
 formulainit:
 	LB INITTAG initelement* RB;
 formulagoal:
@@ -56,6 +56,10 @@ name: SIMPLENAME;
 
 lengthspecserial: LB SERIALTAG NUMBER RB;
 lengthspecparallel: LB PARALLELTAG NUMBER RB;
+
+variable:
+	SIMPLENAME ('-'SIMPLENAME)?
+	;
 
 LB : '(';
 RB : ')';

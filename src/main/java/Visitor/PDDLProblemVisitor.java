@@ -3,7 +3,8 @@ package Visitor;
 import ANTLRgenerated.PDDLProblemGrammarBaseVisitor;
 import ANTLRgenerated.PDDLProblemGrammarParser;
 import FormulaComponents.BaseComponents.*;
-import PDDLFormulaContainer.*;
+import FormulaComponents.SimpleVariable;
+import PDDLFormulaContainer.PDDLProblem;
 import PDDLFormulaContainer.SubComponents.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -57,7 +58,19 @@ public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVis
 	@Override
 	public SimpleFormula visitFormulaobjects(PDDLProblemGrammarParser.FormulaobjectsContext ctx) {
 		Objects result = new Objects();
-		for (TerminalNode t:ctx.SIMPLENAME())result.addObject(t.toString());
+		for (PDDLProblemGrammarParser.VariableContext var:ctx.variable()){
+			SimpleVariable variable = (SimpleVariable) visitVariable(var);
+			result.addObject(variable);
+		}
+		return (SimpleFormula) result;
+	}
+
+	@Override
+	public SimpleFormula visitVariable(PDDLProblemGrammarParser.VariableContext ctx) {
+		String name = ctx.SIMPLENAME().get(0).getText();
+		String type = null;
+		if (ctx.SIMPLENAME().size()==2) type = ctx.SIMPLENAME().get(1).getText();
+		SimpleVariable result = new SimpleVariable(name,type);
 		return (SimpleFormula) result;
 	}
 
@@ -141,7 +154,10 @@ public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVis
 	public SimpleFormula visitPredicate(PDDLProblemGrammarParser.PredicateContext ctx) {
 		Logic_PREDICATE result = new Logic_PREDICATE();
 		result.setName((String) visitName(ctx.name()));
-		for (TerminalNode t:ctx.SIMPLENAME()) result.addVariable(t.toString());
+		for (TerminalNode t:ctx.SIMPLENAME()) {
+			SimpleVariable variable = new SimpleVariable(t.toString().replace("//s+",""),"");
+			result.addVariable(variable);
+		}
 		return (SimpleFormula) result;
 	}
 

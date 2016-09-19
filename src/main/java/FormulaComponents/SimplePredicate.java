@@ -17,4 +17,16 @@ public class SimplePredicate {
 
 	public int getVariableCount(){return variables.size();}
 	public String getName(){return name;}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof SimplePredicate){
+			return (this.toString().equals(obj.toString()));
+		}
+		return false;
+	}
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
 }
