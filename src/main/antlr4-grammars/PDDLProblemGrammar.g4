@@ -1,5 +1,8 @@
 grammar PDDLProblemGrammar;
 import REQUIREMENTSGrammar;
+@header {
+   package ANTLRGenerated;
+}
 
 start: pddlproblemfile EOF;
 

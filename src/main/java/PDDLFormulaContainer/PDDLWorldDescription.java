@@ -134,7 +134,7 @@ public class PDDLWorldDescription {
 				SimplePredicate newP = new SimplePredicate();
 				newP.name = pred.name;
 				newP.variables = var;
-				String newName = "pred_"+ pred.getName()+"_var";
+				String newName = "p_"+ pred.getName()+"_v";
 				for (SimpleVariable v:var) newName+="_"+v.getName();
 				newPredicates.put(newP,newName);
 			}
@@ -207,7 +207,7 @@ public class PDDLWorldDescription {
 			}
 
 			@Override
-			public String getWorldRulesFormula() {
+			public List<String> getWorldRulesFormula() {
 				/*  World rules are simple: for each action, and for every combination of possible parameters,
 					two rules are created:
 						- actionName && parameters && (proposition) -> X( proposition)
@@ -223,8 +223,17 @@ public class PDDLWorldDescription {
 						possibilità di utilizzare tale azione con i parametri sbagliati.
 					Every other rule is already written in the behaviour of each action (e.g. precondition)
 				*/
-				String result = "( \n";
+				List<String> result = new ArrayList<String>();
 
+				//aggiunta regola addizionale: per ogni oggetto, varX(oggetto) -> !varX(ognialtrooggetto)
+				int maxParam = 0;
+				for(SimpleAction a:actions) if (a.getParameters().size()>maxParam)maxParam=a.getParameters().size();
+				for (SimpleVariable var:objects)
+					for (int i=0;i<maxParam;i++)
+					for (SimpleVariable var2:objects) if (!var.equals(var2)) {
+						result.add("G( var"+i+var+" -> !var"+i+var2+" )");
+					}
+				//regole base:
 				for (SimpleAction action:actions){
 					List<SimplePredicate> usedPred = action.getEffects().getPredicates();
 					List<List<SimpleVariable>> possibleParameters = getCombination(action.getParameters().size(),objects);
@@ -249,24 +258,29 @@ public class PDDLWorldDescription {
 						List<SimplePredicate> notUsedPredicates = new ArrayList<SimplePredicate>(newPredicates.keySet());
 						notUsedPredicates.removeAll(newPred);
 						for (SimplePredicate p:notUsedPredicates){
-							result+= " ( ( ";
-							result+= action.getName();
-							for (SimpleVariable s:action.getParameters()) result+=" && "+map.get(s);
-							result+=" && "+newPredicates.get(p);
-							result+= " ) -> ";
-							result+= "X( "+newPredicates.get(p)+" )";
-							result+= " )\n";
-							result+= " ( ( ";
-							result+= action.getName();
-							for (SimpleVariable s:action.getParameters()) result+=" && "+map.get(s);
-							result+=" && !"+newPredicates.get(p);
-							result+= " ) -> ";
-							result+= "X( !"+newPredicates.get(p)+" )";
-							result+= " )\n";
+							String tmpres = "";
+							tmpres+= " G( ( ";
+							tmpres+= action.getName();
+							for (int i=0;i<action.getParameters().size();i++)
+								tmpres+=" && var"+i+map.get(action.getParameters().toArray()[i]);
+							tmpres+=" && "+newPredicates.get(p);
+							tmpres+= " ) -> ";
+							tmpres+= "X( "+newPredicates.get(p)+" )";
+							tmpres+= " )";
+							String tmpres2 = "";
+							tmpres2+= " G( ( ";
+							tmpres2+= action.getName();
+							for (int i=0;i<action.getParameters().size();i++)
+								tmpres2+=" && var"+i+map.get(action.getParameters().toArray()[i]);
+							tmpres2+=" && !"+newPredicates.get(p);
+							tmpres2+= " ) -> ";
+							tmpres2+= "X( !"+newPredicates.get(p)+" )";
+							tmpres2+= " )";
+							result.add(tmpres);
+							result.add(tmpres2);
 						}
 					}
 				}
-				result+=" )\n";
 				return result;
 			}
 

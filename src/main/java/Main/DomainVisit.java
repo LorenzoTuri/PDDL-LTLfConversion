@@ -1,7 +1,7 @@
 package Main;
 
-import ANTLRgenerated.PDDLDomainGrammarLexer;
-import ANTLRgenerated.PDDLDomainGrammarParser;
+import ANTLRGenerated.PDDLDomainGrammarLexer;
+import ANTLRGenerated.PDDLDomainGrammarParser;
 import PDDLFormulaContainer.PDDLDomain;
 import Visitor.PDDLDomainVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class DomainVisit {
 	private String file;
-	DomainVisit(String file){
+	public DomainVisit(String file){
 		this.file=file;
 	}
 	public PDDLDomain visit(){

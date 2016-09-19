@@ -1,7 +1,7 @@
 package Visitor;
 
-import ANTLRgenerated.PDDLProblemGrammarBaseVisitor;
-import ANTLRgenerated.PDDLProblemGrammarParser;
+import ANTLRGenerated.PDDLProblemGrammarBaseVisitor;
+import ANTLRGenerated.PDDLProblemGrammarParser;
 import FormulaComponents.BaseComponents.*;
 import FormulaComponents.SimpleVariable;
 import PDDLFormulaContainer.PDDLProblem;

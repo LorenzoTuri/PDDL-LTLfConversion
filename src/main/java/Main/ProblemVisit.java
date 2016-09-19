@@ -1,7 +1,7 @@
 package Main;
 
-import ANTLRgenerated.PDDLProblemGrammarLexer;
-import ANTLRgenerated.PDDLProblemGrammarParser;
+import ANTLRGenerated.PDDLProblemGrammarLexer;
+import ANTLRGenerated.PDDLProblemGrammarParser;
 import PDDLFormulaContainer.PDDLProblem;
 import Visitor.PDDLProblemVisitor;
 import org.antlr.v4.runtime.ANTLRInputStream;
@@ -13,7 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public class ProblemVisit {
 	private String file;
-	ProblemVisit(String file){
+	public ProblemVisit(String file){
 		this.file=file;
 	}
 	public PDDLProblem visit(){

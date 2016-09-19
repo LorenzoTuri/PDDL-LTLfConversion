@@ -1,5 +1,8 @@
 grammar PDDLDomainGrammar;
 import REQUIREMENTSGrammar;
+@header {
+   package ANTLRGenerated;
+}
 
 start:pddlfile EOF;
 

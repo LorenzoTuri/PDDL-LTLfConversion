@@ -1,14 +1,10 @@
 (domain
 	(problem murphy-solution)
 	(:domain double-murphy)
-	(:objects placea placeb vacuum)
+	(:objects placea placeb)
 	(:init
-		(isvacuum vacuum)
-		(isplace placea)
-		(isplace placeb)
 		(isdirty placea)
 		(isdirty placeb)
-		(ison vacuum placea)
 	)
 	(:goal (and
 		(not (isdirty placea))

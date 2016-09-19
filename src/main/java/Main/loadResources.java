@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class loadResources {
 	String inputReaded = "";
-	loadResources(String path) {
+	public loadResources(String path) {
 		//Get file from resources folder
 		ClassLoader classLoader = getClass().getClassLoader();
 		File file = new File(classLoader.getResource(path).getFile());

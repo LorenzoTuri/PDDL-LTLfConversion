@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: eu.fbk.shell:jautomata-core:05.2015-snapshot">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/fbk/shell/jautomata-core/05.2015-snapshot/jautomata-core-05.2015-snapshot.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/fbk/shell/jautomata-core/05.2015-snapshot/jautomata-core-05.2015-snapshot-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/eu/fbk/shell/jautomata-core/05.2015-snapshot/jautomata-core-05.2015-snapshot-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

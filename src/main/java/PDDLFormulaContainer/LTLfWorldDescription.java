@@ -2,12 +2,14 @@ package PDDLFormulaContainer;
 
 import net.sf.tweety.logics.pl.syntax.PropositionalSignature;
 
+import java.util.List;
+
 /**
  * Created by loren on 14/09/2016.
  */
 public abstract class LTLfWorldDescription {
 	public abstract String getInitFormula();
-	public abstract String getWorldRulesFormula();
+	public abstract List<String> getWorldRulesFormula();
 	public abstract String getAgentRuleFormula();
 	public abstract String getActionsFormula();
 	public abstract String getGoalFormula();

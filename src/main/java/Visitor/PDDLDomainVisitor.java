@@ -1,7 +1,7 @@
 package Visitor;
 
-import ANTLRgenerated.PDDLDomainGrammarBaseVisitor;
-import ANTLRgenerated.PDDLDomainGrammarParser.*;
+import ANTLRGenerated.PDDLDomainGrammarBaseVisitor;
+import ANTLRGenerated.PDDLDomainGrammarParser.*;
 import FormulaComponents.BaseComponents.*;
 import FormulaComponents.Formula;
 import FormulaComponents.SimpleAction;
