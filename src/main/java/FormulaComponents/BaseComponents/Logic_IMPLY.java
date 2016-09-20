@@ -36,8 +36,11 @@ public class Logic_IMPLY extends BASE_FORMULA {
 
 	@Override
 	public String toStringLTLf(Map<SimplePredicate,String> map) {
+		String br = "";String br2 = "";String br3="";String br4="";
+		if (formula1 instanceof Logic_PREDICATE) {br = "(";br2 = ")";}
+		if (formula2 instanceof Logic_PREDICATE) {br3 = "(";br4 = ")";}
 		if (formula1==null || formula2 == null) return "";
-		return "("+formula1.toStringLTLf(map)+") -> ("+formula2.toStringLTLf(map)+")";
+		return br+formula1.toStringLTLf(map)+br2+" -> "+br3+formula2.toStringLTLf(map)+br4;
 	}
 
 	@Override

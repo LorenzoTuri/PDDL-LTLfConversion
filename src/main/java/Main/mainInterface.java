@@ -41,14 +41,14 @@ public class mainInterface {
 		PDDLProblem problem = problemVisit.visit();
 
 		PDDLWorldDescription world = new PDDLWorldDescription(domain,problem);
-		//System.out.println("\n"+world);
+		System.out.println(world);
 
 		LTLfWorldDescription ltlfWorld = world.toLTLfFormula();
-		//System.out.println("ACTION\t"+ltlfWorld.getActionsFormula());
-		//System.out.println("AGENT\t"+ltlfWorld.getAgentRuleFormula());
-		//System.out.println("GOAL\t"+ltlfWorld.getGoalFormula());
-		//System.out.println("INIT\t"+ltlfWorld.getInitFormula());
-		//System.out.println("WORLD\t"+ltlfWorld.getWorldRulesFormula());
+		System.out.println("ACTION\t"+ltlfWorld.getActionsFormula());
+		System.out.println("AGENT\t"+ltlfWorld.getAgentRuleFormula());
+		System.out.println("GOAL\t"+ltlfWorld.getGoalFormula());
+		System.out.println("INIT\t"+ltlfWorld.getInitFormula());
+		System.out.println("WORLD\t"+ltlfWorld.getWorldRulesFormula());
 
 		List<String> formulas = ltlfWorld.getWorldRulesFormula();
 		Automaton aut[] = new Automaton[formulas.size()];
@@ -60,12 +60,54 @@ public class mainInterface {
 			aut[i] = (ltlfFormula2Aut(formula, null, false, true, false, true, false)).getAutomaton();
 			printAutomaton(aut[i],"output/automaton"+i+".gv");
 		}
-		for (int i=1;i<aut.length;i++){
-			System.out.println("Sto unendo l'automa finale con l'automa "+i);
-			aut[0] = (new Mix()).transform(aut[0],aut[i]);
-			aut[0] = (new Reducer()).transform(aut[0]);
-			printAutomaton(aut[0],"output/resultUntil"+i+".gv");
-		}
+		System.out.println("Sto unendo le esclusioni");
+		Automaton exclusionRules = (new Mix()).transform(aut[0],aut[1]);
+		exclusionRules = (new Mix()).transform(exclusionRules,aut[2]);
+		exclusionRules = (new  Mix()).transform(exclusionRules,aut[3]);
+		exclusionRules = (new Reducer()).transform(exclusionRules);
+		AutomatonUtils.printAutomaton(exclusionRules,"output/exclusionRules.gv");
+		System.out.println("Sto unendo le move");
+		Automaton moveAutomaton = (new Mix()).transform(aut[4],aut[5]);
+		moveAutomaton = (new Mix()).transform(moveAutomaton,aut[6]);
+		moveAutomaton = (new Mix()).transform(moveAutomaton,aut[7]);
+		moveAutomaton = (new Reducer()).transform(moveAutomaton);
+		AutomatonUtils.printAutomaton(moveAutomaton,"output/moveRules.gv");
+		System.out.println("Sto unendo move e esclusioni");
+		Automaton moveAndExclusion = (new Mix()).transform(exclusionRules,moveAutomaton);
+		moveAndExclusion = (new Reducer()).transform(moveAndExclusion);
+		AutomatonUtils.printAutomaton(moveAndExclusion,"output/exclusionAndMoveRules.gv");
+		System.out.println("Sto unendo le clean");
+		Automaton cleanAutomaton = (new Mix()).transform(aut[8],aut[9]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[10]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[11]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[12]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[13]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[14]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[15]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[16]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[17]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[18]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[19]);
+		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
+		AutomatonUtils.printAutomaton(cleanAutomaton,"output/cleanRules.gv");
+		System.out.println("Sto unendo clean e esclusioni");
+		Automaton cleanAndExclusion = (new Mix()).transform(exclusionRules,cleanAutomaton);
+		cleanAndExclusion = (new Reducer()).transform(cleanAndExclusion);
+		AutomatonUtils.printAutomaton(cleanAndExclusion,"output/exclusionAndCleanRules.gv");
+		System.out.println("Sto unendo l'automa completo");
+		Automaton completeAutomaton = (new Mix()).transform(moveAndExclusion,cleanAndExclusion);
+		completeAutomaton = (new Reducer()).transform(completeAutomaton);
+		AutomatonUtils.printAutomaton(completeAutomaton,"output/exclusionCompleteRules.gv");
 	}
 
 	public static void main(String[] args){

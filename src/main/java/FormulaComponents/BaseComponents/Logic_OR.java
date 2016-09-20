@@ -27,8 +27,14 @@ public class Logic_OR extends BASE_FORMULA {
 
 	@Override
 	public String toStringLTLf(Map<SimplePredicate,String> map) {
-		String result = "("+formulas.get(0).toStringLTLf(map)+")";
-		for (int i=1;i<formulas.size();i++) result+=" || ("+formulas.get(i).toStringLTLf(map)+")";
+		String br="";String br2="";
+		if (formulas.get(0) instanceof  Logic_PREDICATE){br="(";br2=")";}
+		String result = br+formulas.get(0).toStringLTLf(map)+br2;
+		for (int i=1;i<formulas.size();i++) {
+			br="";br2="";
+			if (formulas.get(i) instanceof  Logic_PREDICATE){br="(";br2=")";}
+			result+=" || "+br+formulas.get(i).toStringLTLf(map)+br2;
+		}
 		return result;
 	}
 

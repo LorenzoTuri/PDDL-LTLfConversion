@@ -11,7 +11,7 @@ public abstract class LTLfWorldDescription {
 	public abstract String getInitFormula();
 	public abstract List<String> getWorldRulesFormula();
 	public abstract String getAgentRuleFormula();
-	public abstract String getActionsFormula();
+	public abstract List<String> getActionsFormula();
 	public abstract String getGoalFormula();
 
 	public abstract PropositionalSignature getAgentSet();

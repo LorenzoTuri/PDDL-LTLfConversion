@@ -194,7 +194,7 @@ public class PDDLWorldDescription {
 
 			@Override
 			public String getInitFormula() {
-				String init = newPredicates.get(initialization.get(0));
+				String init = "( "+newPredicates.get(initialization.get(0));
 				for (int i = 1;i<initialization.size();i++){
 					init+= " && "+newPredicates.get(initialization.get(i));
 				}
@@ -203,6 +203,7 @@ public class PDDLWorldDescription {
 				for (int i=0;i<negatedInitialization.size();i++){
 					init+= " && !"+newPredicates.get(negatedInitialization.get(i));
 				}
+				init+=" )";
 				return init;
 			}
 
@@ -306,13 +307,52 @@ public class PDDLWorldDescription {
 			}
 
 			@Override
-			public String getActionsFormula() {
-				return "ACTIONS";
+			public List<String> getActionsFormula() {
+				List<String> res = new ArrayList<String>();
+				for (SimpleAction action:actions){
+					String result = "";
+					for (List<SimpleVariable> currentVariables:getCombination(action.getParameters().size(),objects)){
+						//creo una mappa dalle variabili precedenti a quelle nuove
+						Map<SimpleVariable,SimpleVariable> newVar = new HashMap<SimpleVariable, SimpleVariable>();
+						for (int i=0;i<currentVariables.size();i++)
+							newVar.put((SimpleVariable) action.getParameters().toArray()[i],currentVariables.get(i));
+
+						//creo una mappa dai vecchi predicati a quelli con le variabili correnti
+						Map<SimplePredicate,String> map = new HashMap<SimplePredicate, String>();
+						List<SimplePredicate> usedPredicates = action.getPreconditions().getFormula().getPredicates();
+						for (SimplePredicate p:action.getPreconditions().getPredicates()){
+							String newPred = "";
+							newPred+="p_"+p.getName()+"_v";
+							for (SimpleVariable var:p.variables) newPred+="_"+newVar.get(var).getName();
+							map.put(p,newPred);
+						}
+						for (SimplePredicate p:action.getEffects().getPredicates()){
+							String newPred = "";
+							newPred+="p_"+p.getName()+"_v";
+							for (SimpleVariable var:p.variables) newPred+="_"+newVar.get(var).getName();
+							map.put(p,newPred);
+						}
+						result+=" (";
+						result+=" ( "+action.getName();
+						for(int i=0;i<currentVariables.size();i++) result+=" && var"+i+currentVariables.get(i);
+
+						//inserimento precondizioni
+						result+=" (";
+						result+=action.getPreconditions().getFormula().toStringLTLf(map);
+						result+=" )";
+						result+=" ) -> X("; //chiusura parentesi prima parte implicazione
+						result+=action.getEffects().getFormula().toStringLTLf(map);
+						result+=" )";//chiusura parentesi seconda parte implicazione
+						result+=" )";
+					}
+					res.add(result);
+				}
+				return res;
 			}
 
 			@Override
 			public String getGoalFormula() {
-				return goal.toStringLTLf(newPredicates);
+				return "( "+goal.toStringLTLf(newPredicates)+" )";
 			}
 
 			@Override
