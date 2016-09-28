@@ -8,7 +8,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by loren on 26/09/2016.
+ * Class used to print to console various information about specific Automaton.
+ * It's completely under user control, so if other task are needed in background, please create a new thread
+ * for either them or this class (it gains control when "start()" is called).
+ * Functionality implmented are:
+ *  1. Terminals
+ *  2. Initials
+ *  3. Alphabet
+ *  4. States
+ *  5. Transitions
+ *  6. Transitions from a state
+ *  7. Transition between 2 states
  */
 public class AutomatonCrawler {
 	Automaton automaton;
