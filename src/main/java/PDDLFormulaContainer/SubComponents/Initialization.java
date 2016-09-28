@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 05/09/2016.
+ * Class used to store the initialization of a PDDLProblem specification
  */
 public class Initialization extends SimpleFormula {
 	List<Logic_PREDICATE> init;

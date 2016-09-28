@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 18/07/2016.
+ * Class used to Store the predicates of a PDDLDomain specification
  */
 public class Predicates extends SimpleFormula {
 	List<SimplePredicate> predicates = new ArrayList<SimplePredicate>();

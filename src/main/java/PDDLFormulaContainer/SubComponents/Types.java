@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 18/07/2016.
+ * Class used to store the existent type of a PDDL Domain specification
  */
 public class Types extends SimpleFormula {
 	List<String> types = new ArrayList<String>();

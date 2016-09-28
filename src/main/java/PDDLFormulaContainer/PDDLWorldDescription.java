@@ -15,7 +15,8 @@ import net.sf.tweety.logics.pl.syntax.PropositionalSignature;
 import java.util.*;
 
 /**
- * Created by loren on 06/09/2016.
+ * Class that merges the Domain and Problem file of a PDDL specification. Many controls are made to ensure the input files
+ * are coherent
  */
 public class PDDLWorldDescription {
 	PDDLDomain domain = null;
@@ -35,6 +36,15 @@ public class PDDLWorldDescription {
 
 	Map<SimplePredicate,String> newPredicates = new HashMap<SimplePredicate, String>();
 
+	/**
+	 * Only constuctor for this object
+	 * @param domain
+	 * @param problem
+	 * @throws RequirementException
+	 * @throws WrongDomainException
+	 * @throws NonExistentPredicateException
+	 * @throws NonExistentParameterException
+	 */
 	public PDDLWorldDescription(PDDLDomain domain, PDDLProblem problem) throws RequirementException, WrongDomainException, NonExistentPredicateException, NonExistentParameterException {
 		this.domain = domain;
 		this.problem = problem;
@@ -63,6 +73,13 @@ public class PDDLWorldDescription {
 		validate();
 	}
 
+	/**
+	 * Function used from the costructor to ensure coherency between the two input files
+	 * @throws RequirementException
+	 * @throws WrongDomainException
+	 * @throws NonExistentPredicateException
+	 * @throws NonExistentParameterException
+	 */
 	private void validate() throws RequirementException, WrongDomainException, NonExistentPredicateException, NonExistentParameterException {
 		//First Step: problem requirements must be contained in domainRequirements
 		for (String s:problemRequirements) if (!domainRequirements.contains(s))
@@ -155,6 +172,13 @@ public class PDDLWorldDescription {
 		result+="Declared Goal: \n"+goal + "\n";
 		return result;
 	}
+
+	/**
+	 * Function used to generate a list of combinations of the input list, with "num" length
+	 * @param num
+	 * @param list
+	 * @return
+	 */
 	private List<List<SimpleVariable>> getCombination(int num,List<SimpleVariable> list){
 		List<List<SimpleVariable>> result = new ArrayList<List<SimpleVariable>>();
 		if (num>1){
@@ -178,6 +202,11 @@ public class PDDLWorldDescription {
 		return result;
 	}
 
+	/**
+	 * Returns an object containing the LTLf description of the PDDL file. it's already decomposed in
+	 * SubFormulas to ensure that even slow translator can handle those formulas
+	 * @return
+	 */
 	public LTLfWorldDescription toLTLfFormula(){
 
 		LTLfWorldDescription result = new LTLfWorldDescription() {

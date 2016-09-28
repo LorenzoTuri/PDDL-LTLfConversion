@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 30/07/2016.
+ * Class used to store the main part of a PDDL Domain specification. Most of this is composed from actions
  */
 public class Structure extends SimpleFormula {
 	List<SimpleAction> actions = new ArrayList<SimpleAction>();

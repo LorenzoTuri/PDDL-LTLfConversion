@@ -4,7 +4,7 @@ import FormulaComponents.BaseComponents.BASE_FORMULA;
 import FormulaComponents.SimpleFormula;
 
 /**
- * Created by loren on 05/09/2016.
+ * Class used to store the Goal formula of an PDDLProblem specification
  */
 public class Goal extends SimpleFormula {
 	BASE_FORMULA formula;

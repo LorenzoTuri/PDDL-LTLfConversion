@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 05/09/2016.
+ * Class used to store the existent objects in a PDDLProblem specification
  */
 public class Objects extends SimpleFormula {
 	List<SimpleVariable> objects;

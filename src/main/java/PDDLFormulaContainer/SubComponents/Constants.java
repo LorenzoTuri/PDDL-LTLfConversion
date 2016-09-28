@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 18/07/2016.
+ * Class used to store the constants of a PDDL domain formula
  */
 public class Constants extends SimpleFormula {
 	List<SimpleVariable> constants = new ArrayList<SimpleVariable>();

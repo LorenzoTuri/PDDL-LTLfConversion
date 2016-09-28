@@ -4,7 +4,7 @@ import FormulaComponents.SimpleFormula;
 import PDDLFormulaContainer.SubComponents.*;
 
 /**
- * Created by loren on 02/08/2016.
+ * Class used to store the complete PDDLProblem file. Should be used to generate a PDDLWorldDescritpion
  */
 public class PDDLProblem extends SimpleFormula{
 	Problem problem = null;

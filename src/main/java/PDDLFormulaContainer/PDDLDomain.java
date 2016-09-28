@@ -4,7 +4,7 @@ import FormulaComponents.SimpleFormula;
 import PDDLFormulaContainer.SubComponents.*;
 
 /**
- * Created by loren on 30/07/2016.
+ * Class used to store the complete PDDLDomain file. Should be used to generate a PDDLWorldDescription
  */
 public class PDDLDomain extends SimpleFormula {
 	Domain domain;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 18/07/2016.
+ * Class used to store the list of requirements of a PDDL Domain/Problem specification
  */
 public class Requirements extends SimpleFormula {
 	List<String> requirements;

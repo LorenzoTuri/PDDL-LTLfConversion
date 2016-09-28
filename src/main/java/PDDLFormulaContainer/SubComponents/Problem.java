@@ -3,7 +3,7 @@ package PDDLFormulaContainer.SubComponents;
 import FormulaComponents.SimpleFormula;
 
 /**
- * Created by loren on 05/09/2016.
+ * Class used to store the Problem name of a PDDLProblem specification
  */
 public class Problem extends SimpleFormula {
 	private String name;

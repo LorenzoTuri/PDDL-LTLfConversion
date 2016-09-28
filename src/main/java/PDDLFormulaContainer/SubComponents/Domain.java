@@ -3,7 +3,7 @@ package PDDLFormulaContainer.SubComponents;
 import FormulaComponents.SimpleFormula;
 
 /**
- * Created by loren on 30/07/2016.
+ * Class used to store the domain of a PDDL Domain/Problem formula
  */
 public class Domain extends SimpleFormula {
 	String domain;
