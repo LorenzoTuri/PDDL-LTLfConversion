@@ -12,7 +12,8 @@ import PDDLFormulaContainer.SubComponents.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
- * Created by loren on 20/07/2016.
+ * Class generated to Visit Domain Definition File in a PDDL Domain.
+ * Should be used in combo with PDDLProblemVisitor to generate a complete PDDL translation to java classes
  */
 public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisitor<SimpleFormula> {
 	@Override

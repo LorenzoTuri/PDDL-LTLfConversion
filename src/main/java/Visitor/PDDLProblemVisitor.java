@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**
  * Class generated to Visit Problem Definition File in a PDDL Domain.
- * Should be used in combo with PDDLDomain to generate a complete PDDL translation to java classes
+ * Should be used in combo with PDDLDomainVisitor to generate a complete PDDL translation to java classes
  */
 public class PDDLProblemVisitor<SimpleFormula> extends PDDLProblemGrammarBaseVisitor<SimpleFormula> {
 	@Override
