@@ -1,7 +1,7 @@
 package Exceptions;
 
 /**
- * Created by loren on 06/09/2016.
+ * Exception used to tell the user that the problem is using a wrong domain
  */
 public class WrongDomainException extends Exception {
 	String first;

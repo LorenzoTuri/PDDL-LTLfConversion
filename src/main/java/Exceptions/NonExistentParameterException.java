@@ -6,7 +6,7 @@ import FormulaComponents.SimpleVariable;
 import java.util.List;
 
 /**
- * Created by loren on 06/09/2016.
+ * Exception used to tell the user he has used a parameter that doeasn't exist in the current scope of the PDDL action/predicate
  */
 public class NonExistentParameterException extends Exception {
 	SimplePredicate predicate;

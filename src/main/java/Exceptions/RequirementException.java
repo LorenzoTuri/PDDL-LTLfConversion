@@ -1,7 +1,7 @@
 package Exceptions;
 
 /**
- * Created by loren on 06/09/2016.
+ * Exception used to tell the user that the requirements of the domain doesn't contain the requirements of the problem
  */
 public class RequirementException extends Exception {
 	String wrongRequirement = "";

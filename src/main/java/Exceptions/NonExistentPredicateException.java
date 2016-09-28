@@ -4,7 +4,7 @@ import FormulaComponents.BaseComponents.Logic_PREDICATE;
 import FormulaComponents.SimplePredicate;
 
 /**
- * Created by loren on 06/09/2016.
+ * Exception used to tell the user that the predicate he's using doesn't exists
  */
 public class NonExistentPredicateException extends Exception {
 	SimplePredicate predicate;
