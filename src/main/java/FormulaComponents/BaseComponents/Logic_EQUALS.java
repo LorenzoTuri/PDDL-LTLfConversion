@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express a EQUALS formula specification
  */
 public class Logic_EQUALS extends BASE_FORMULA {
 	public int NUMBER_FORMULA_1 = 0;
@@ -15,6 +15,11 @@ public class Logic_EQUALS extends BASE_FORMULA {
 	BASE_FORMULA formula2 = null;
 	int iterator = 0;
 
+	/**
+	 * adds a formula to the specification. Currently supports only 2 formula. The collection cycles so if a third formula
+	 * Should be inserted the first is lost, if a fouth is inserted the second is lost and so on...
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) {
 		if (iterator == 0) formula1 = formula;
 		else if (iterator ==1)formula2 = formula;
@@ -22,6 +27,12 @@ public class Logic_EQUALS extends BASE_FORMULA {
 		if (iterator >1) iterator = 0;
 	}
 
+	/**
+	 * returns a formula between the 2 saved formulas, or null if the iterator is different from
+	 *      NUMBER_FORMULA_1 or NUMBER_FORMULA_2
+	 * @param which
+	 * @return
+	 */
 	public BASE_FORMULA getFormula(int which){
 		if (which == NUMBER_FORMULA_1) return formula1;
 		else if (which == NUMBER_FORMULA_2) return formula2;

@@ -1,7 +1,7 @@
 package FormulaComponents;
 
 /**
- * Created by loren on 30/07/2016.
+ * Used for hierarchy
  */
 public class SimpleFormula {
 }

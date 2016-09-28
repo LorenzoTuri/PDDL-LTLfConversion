@@ -7,15 +7,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express an OR formula specification
  */
 public class Logic_OR extends BASE_FORMULA {
 	List<BASE_FORMULA> formulas = new ArrayList<BASE_FORMULA>();
 
+	/**
+	 * adds a formula to the or specification
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) {
 		formulas.add(formula);
 	}
 
+	/**
+	 * returns the i-th formula saved.
+	 * @param iterator
+	 * @return
+	 */
 	public BASE_FORMULA getFormula(int iterator){return formulas.get(iterator);}
 
 	@Override

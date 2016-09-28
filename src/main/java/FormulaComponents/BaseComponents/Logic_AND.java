@@ -7,15 +7,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express an AND formula
  */
 public class Logic_AND extends BASE_FORMULA {
 	List<BASE_FORMULA> formulas = new ArrayList<BASE_FORMULA>();
 
+	/**
+	 * Add a formula to the and specification
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) {
 		formulas.add(formula);
 	}
 
+	/**
+	 * Returns the i-th formula of the AND specification
+	 * @param iterator
+	 * @return
+	 */
 	public BASE_FORMULA getFormula(int iterator){return formulas.get(iterator);}
 
 	@Override

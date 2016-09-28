@@ -6,15 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express a NOT formula specification
  */
 public class Logic_NOT extends BASE_FORMULA {
 	BASE_FORMULA formula = null;
 
+	/**
+	 * adds a formula to the not specification. Only 1 formula supported, so a second overwrites the first
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) {
 		this.formula = formula;
 	}
 
+	/**
+	 * returns the currently saved formula
+	 * @return
+	 */
 	public BASE_FORMULA getFormula() {
 		return formula;
 	}

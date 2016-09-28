@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by loren on 30/07/2016.
+ * Used to express a PDDL predicate.
+ * Contains his name and list of variables, eventually typed
  */
 public class SimplePredicate {
 	public String name;
@@ -15,7 +16,16 @@ public class SimplePredicate {
 		return name+" "+variables.toString();
 	}
 
+	/**
+	 * Function used to get the number of paraters
+	 * @return counter
+	 */
 	public int getVariableCount(){return variables.size();}
+
+	/**
+	 * Function used to get the predicate's name
+	 * @return name
+	 */
 	public String getName(){return name;}
 
 	@Override

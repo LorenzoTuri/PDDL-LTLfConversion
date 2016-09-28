@@ -6,14 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express a BRACKETS formula specification
  */
 public class Logic_BRACKETS extends BASE_FORMULA {
 	BASE_FORMULA formula = null;
+
+	/**
+	 * Used to add a formula to the brackets. Currently supports only a formula, so old formula is lost
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) {
 		this.formula = formula;
 	}
 
+	/**
+	 * return the current child formula
+	 * @return
+	 */
 	public BASE_FORMULA getFormula() {
 		return formula;
 	}

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express an IMPLY formula specification
  */
 public class Logic_IMPLY extends BASE_FORMULA {
 	public int NUMBER_FORMULA_1 = 0;
@@ -15,6 +15,11 @@ public class Logic_IMPLY extends BASE_FORMULA {
 	BASE_FORMULA formula2 = null;
 	int iterator = 0;
 
+	/**
+	 * adds a formula to the imply. Currently supports only 2 formulas, and the collection cycles. If a third is inserted
+	 * the first is lost, for a fourth the second is lost and so on...
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) {
 		if (iterator == 0) formula1 = formula;
 		else if (iterator ==1)formula2 = formula;
@@ -22,6 +27,11 @@ public class Logic_IMPLY extends BASE_FORMULA {
 		if (iterator >1) iterator = 0;
 	}
 
+	/**
+	 * return the currently saved formula between the two possible
+	 * @param which
+	 * @return
+	 */
 	public BASE_FORMULA getFormula(int which){
 		if (which == NUMBER_FORMULA_1) return formula1;
 		else if (which == NUMBER_FORMULA_2) return formula2;

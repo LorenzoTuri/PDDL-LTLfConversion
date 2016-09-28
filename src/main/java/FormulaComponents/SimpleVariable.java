@@ -3,7 +3,7 @@ package FormulaComponents;
 import org.antlr.v4.runtime.misc.NotNull;
 
 /**
- * Created by loren on 30/07/2016.
+ * Used to express a variable (of an PDDL action or predicate)
  */
 public class SimpleVariable {
 	String name;
@@ -20,7 +20,19 @@ public class SimpleVariable {
 		return result;
 	}
 
+	/**
+	 * Function used to retrieve the variable's name
+	 * @return
+	 */
 	public String getName(){return name;}
+
+	/**
+	 * Function used to retrieve the variable's type
+	 * @return
+	 */
+	public String getType(){
+		return type;
+	}
 
 	@Override
 	public boolean equals(Object obj) {

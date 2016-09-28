@@ -13,17 +13,33 @@ public class Logic_FORALL extends BASE_FORMULA {
 	List<String> simplenames = new ArrayList<String>();
 	BASE_FORMULA formula;
 
+	/**
+	 * Adds a formula to the forall...currently supports only a single formula, so if a second formula should
+	 * be inserted the first is lost
+	 * @param formula
+	 */
 	public void addFormula(BASE_FORMULA formula) { this.formula = formula; }
 
+	/**
+	 * adds a Simplename (should be transformed in predicates in next updates) to the forall
+	 * @param formula
+	 */
 	public void addSimplename(String formula){ simplenames.add(formula); }
 
+	/**
+	 * returns the currently saved formula
+	 * @return
+	 */
 	public BASE_FORMULA getFormula() {
 		return formula;
 	}
 
+	/**
+	 * returns a Simplename(should be updated to predicate). Generate exception if outOfBounds
+	 * @param iterator index of the simplename
+	 * @return
+	 */
 	public String getSimplename(int iterator){ return simplenames.get(iterator); }
-
-	public BASE_FORMULA getFormula(int iterator){ return formula; }
 
 	@Override
 	public String toString() {

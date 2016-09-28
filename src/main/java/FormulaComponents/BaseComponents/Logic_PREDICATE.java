@@ -8,12 +8,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by loren on 05/08/2016.
+ * Used to express a PREDICATE formula specification
  */
 public class Logic_PREDICATE extends BASE_FORMULA {
 	SimplePredicate predicate = new SimplePredicate();
 
+	/**
+	 * Set the name of the predicate
+	 * @param name
+	 */
 	public void setName(String name){predicate.name = name;}
+
+	/**
+	 * Add a variable to the predicate
+	 * @param variable
+	 */
 	public void addVariable(SimpleVariable variable){
 		predicate.variables.add(variable);
 	}
