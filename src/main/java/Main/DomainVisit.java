@@ -9,13 +9,19 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
- * Created by loren on 06/09/2016.
+ * Use this class do read the domain file of a PDDL specification
  */
 public class DomainVisit {
 	private String file;
 	public DomainVisit(String file){
 		this.file=file;
 	}
+
+	/**
+	 * returns a PDDLDomain (a storage type for datas) that should be used in combo with a PDDLProblem to generate a
+	 * PDDLWorldDescription
+	 * @return
+	 */
 	public PDDLDomain visit(){
 		PDDLDomain result;
 

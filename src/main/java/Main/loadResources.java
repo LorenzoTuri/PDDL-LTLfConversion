@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Scanner;
 
 /**
- * Created by loren on 18/07/2016.
+ * Class used to read efficently a file under the scr/main/resources folder
  */
 public class loadResources {
 	String inputReaded = "";

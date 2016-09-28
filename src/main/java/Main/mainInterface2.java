@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by loren on 20/09/2016.
+ * Example Interface
  */
 public class mainInterface2 {
 	mainInterface2(){

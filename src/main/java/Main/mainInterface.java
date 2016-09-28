@@ -25,7 +25,7 @@ import java.io.PrintStream;
 import static main.Main.ltlfFormula2Aut;
 
 /**
- * Created by loren on 18/07/2016.
+ * Example interface
  */
 public class mainInterface {
 	mainInterface(String domainPath, String problemPath) throws IOException, RequirementException, WrongDomainException, NonExistentPredicateException, NonExistentParameterException {
