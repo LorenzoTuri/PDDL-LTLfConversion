@@ -116,11 +116,15 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 		SimpleAction action = new SimpleAction();
 		action.setName(ctx.SIMPLENAME().getText());
 
-		SimpleAction temp = (SimpleAction) visitParametersdefinition(ctx.parametersdefinition());
-		if (temp!=null) action.addAllParameter(temp.getParameters());
-
-		Formula formula = (Formula) visitPreconditiondefinition(ctx.preconditiondefinition());
-		if (formula != null)action.setPreconditions(formula);
+		if (ctx.parametersdefinition()!=null) {
+			SimpleAction temp = (SimpleAction) visitParametersdefinition(ctx.parametersdefinition());
+			if (temp!=null) action.addAllParameter(temp.getParameters());
+		}
+		Formula formula;
+		if (ctx.preconditiondefinition()!=null) {
+			formula = (Formula) visitPreconditiondefinition(ctx.preconditiondefinition());
+			if (formula != null) action.setPreconditions(formula);
+		}
 
 		formula = (Formula) visitEffectsdefinition(ctx.effectsdefinition());
 		if (formula != null) action.setEffects(formula);
@@ -210,11 +214,6 @@ public class PDDLDomainVisitor<SimpleFormula> extends PDDLDomainGrammarBaseVisit
 			Logic_BRACKETS brackets = new Logic_BRACKETS();
 			brackets.addFormula((BASE_FORMULA) visitFormula(ctx.formula(0)));
 			formula = brackets;
-
-		}else if (ctx.SIMPLENAME()!=null){
-			Logic_NAME name = new Logic_NAME();
-			name.setName(ctx.SIMPLENAME(0).toString());
-			formula = name;
 
 		}else System.err.println("ERROR");
 

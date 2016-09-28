@@ -1,0 +1,13 @@
+(domain
+	(problem murphy-solution)
+	(:domain double-murphy)
+	(:init
+		(dirtya)
+		(dirtyb)
+		(isona)
+	)
+	(:goal (and
+		(not(dirtya))
+		(not(dirtyb))
+	))
+)

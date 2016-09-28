@@ -67,11 +67,11 @@ public class PDDLWorldDescription {
 		//First Step: problem requirements must be contained in domainRequirements
 		for (String s:problemRequirements) if (!domainRequirements.contains(s))
 			throw new RequirementException(s);
-		System.out.println("Requirements match!");
+		//System.out.println("Requirements match!");
 		//Second Step: domain do not match
 		if (!(problem.domain.getDomain().equals(domain.domain.getDomain())))
 			throw new WrongDomainException(problem.domain.getDomain(),domain.domain.getDomain());
-		System.out.println("Domains match!");
+		//System.out.println("Domains match!");
 		//Third step: validation of the elements of the domain
 		//Third.1 : Predicates of actions exists and use correct parameters
 		for (SimpleAction action: actions){
@@ -79,7 +79,7 @@ public class PDDLWorldDescription {
 			parameters.addAll(action.getParameters());
 
 			List<SimplePredicate> predicates = new ArrayList<SimplePredicate>();
-			predicates.addAll(action.getPreconditions().getPredicates());
+			if (action.getPreconditions()!=null) predicates.addAll(action.getPreconditions().getPredicates());
 			predicates.addAll(action.getEffects().getPredicates());
 
 			//verifica firma predicati:
@@ -97,7 +97,7 @@ public class PDDLWorldDescription {
 				}
 			}
 		}
-		System.out.println("Actions signature match!");
+		//System.out.println("Actions signature match!");
 		//Fourth: Validation of the initialization of the problem
 		for (SimplePredicate p:initialization){
 			boolean exists = false;
@@ -113,7 +113,7 @@ public class PDDLWorldDescription {
 					throw new NonExistentParameterException(p,param,new ArrayList<SimpleVariable>());
 			}
 		}
-		System.out.println("Problem's initialization predicates match!");
+		//System.out.println("Problem's initialization predicates match!");
 		//Fifth: Validation of the goal of the problem
 		for (SimplePredicate p:goal.getPredicates()){
 			boolean exists = false;
@@ -126,7 +126,7 @@ public class PDDLWorldDescription {
 					throw new NonExistentParameterException(p,param,objects);
 			}
 		}
-		System.out.println("Problem's goal formula is correct and her predicates match!");
+		//System.out.println("Problem's goal formula is correct and her predicates match!");
 		//Sixth: Creation of newPredicates Map:
 		for(SimplePredicate pred:predicates){
 			List<List<SimpleVariable>> temp = getCombination(pred.getVariableCount(),objects);
@@ -139,7 +139,7 @@ public class PDDLWorldDescription {
 				newPredicates.put(newP,newName);
 			}
 		}
-		System.out.println("Predicates Map generated!");
+		//System.out.println("Predicates Map generated!");
 	}
 
 	@Override
@@ -173,6 +173,7 @@ public class PDDLWorldDescription {
 				temp.add(var);
 				result.add(temp);
 			}
+			result.add(new ArrayList<SimpleVariable>());
 		}
 		return result;
 	}
@@ -187,13 +188,17 @@ public class PDDLWorldDescription {
 				//inizializzo l'insieme dell'agente con i nomi delle azioni
 				for (SimpleAction a:actions) agentSet.add(new Proposition(a.getName()));
 				//inizializzo l'insieme dell'environment con
-
+				for (String s:newPredicates.values()) environmentSet.add(new Proposition(s));
+				int maxVar = 0;
+				for (SimpleAction a:actions) if (a.getParameters().size()>maxVar) maxVar = a.getParameters().size();
+				for (SimpleVariable var:objects)
+						for (int i=0;i<maxVar;i++)
+							environmentSet.add(new Proposition("var"+i+var));
 				//inizializzo l'insieme invisibile con
-
 			}
 
 			@Override
-			public String getInitFormula() {
+			public InitRules getInitRules() {
 				String init = "( "+newPredicates.get(initialization.get(0));
 				for (int i = 1;i<initialization.size();i++){
 					init+= " && "+newPredicates.get(initialization.get(i));
@@ -204,11 +209,11 @@ public class PDDLWorldDescription {
 					init+= " && !"+newPredicates.get(negatedInitialization.get(i));
 				}
 				init+=" )";
-				return init;
+				return new InitRules(init);
 			}
 
 			@Override
-			public List<String> getWorldRulesFormula() {
+			public WorldRules getWorldRules() {
 				/*  World rules are simple: for each action, and for every combination of possible parameters,
 					two rules are created:
 						- actionName && parameters && (proposition) -> X( proposition)
@@ -232,14 +237,13 @@ public class PDDLWorldDescription {
 				for (SimpleVariable var:objects)
 					for (int i=0;i<maxParam;i++)
 					for (SimpleVariable var2:objects) if (!var.equals(var2)) {
-						result.add("G( var"+i+var+" -> !var"+i+var2+" )");
+						result.add("( var"+i+var+" -> !var"+i+var2+" )");
 					}
 				//regole base:
 				for (SimpleAction action:actions){
 					List<SimplePredicate> usedPred = action.getEffects().getPredicates();
 					List<List<SimpleVariable>> possibleParameters = getCombination(action.getParameters().size(),objects);
 					for (List<SimpleVariable> currentParameters:possibleParameters){
-
 						//creo una mappa dai parametri generici alla selezione di parametri in analisi al momento.
 						Map<SimpleVariable,SimpleVariable> map = new HashMap<SimpleVariable,SimpleVariable>();
 						for (int i=0;i<action.getParameters().size();i++){
@@ -260,7 +264,7 @@ public class PDDLWorldDescription {
 						notUsedPredicates.removeAll(newPred);
 						for (SimplePredicate p:notUsedPredicates){
 							String tmpres = "";
-							tmpres+= " G( ( ";
+							tmpres+= " ( ( ";
 							tmpres+= action.getName();
 							for (int i=0;i<action.getParameters().size();i++)
 								tmpres+=" && var"+i+map.get(action.getParameters().toArray()[i]);
@@ -269,7 +273,7 @@ public class PDDLWorldDescription {
 							tmpres+= "X( "+newPredicates.get(p)+" )";
 							tmpres+= " )";
 							String tmpres2 = "";
-							tmpres2+= " G( ( ";
+							tmpres2+= " ( ( ";
 							tmpres2+= action.getName();
 							for (int i=0;i<action.getParameters().size();i++)
 								tmpres2+=" && var"+i+map.get(action.getParameters().toArray()[i]);
@@ -282,11 +286,11 @@ public class PDDLWorldDescription {
 						}
 					}
 				}
-				return result;
+				return new WorldRules(result);
 			}
 
 			@Override
-			public String getAgentRuleFormula() {
+			public AgentRules getAgentRule() {
 				//At least one action every turn
 				String result = "( ( "+actions.get(0).getName();
 				for (int i=1;i<actions.size();i++) {
@@ -294,24 +298,27 @@ public class PDDLWorldDescription {
 				}
 				result +=" ) ";
 				//at most one action every turn
-				result+= " && ";
-				String[]name = new String[actions.size()];
-				for (int i=0;i<actions.size();i++)name[i] = actions.get(i).getName();
-				for (int i=0;i<name.length;i++)
-					for (int j=i+1;j<name.length;j++){
-						if (i!=j) result+=" !("+name[i]+" && "+name[j]+" )";
-					}
-				result+= " ) ";
-
-				return result;
+				for (int i=0;i<actions.size();i++){
+					result += " && (";
+					result += actions.get(i).getName()+" -> (";
+					List<String> temp = new ArrayList<String>();
+					for (int j=0;j<actions.size();j++) temp.add(actions.get(j).getName());
+					temp.remove(actions.get(i).getName());
+					result += "!"+temp.get(0);
+					for (int j=1;j<temp.size();j++) result += " && !"+temp.get(j);
+					result += ")";
+					result += ")";
+				}
+				result+=")";
+				return new AgentRules(result);
 			}
 
 			@Override
-			public List<String> getActionsFormula() {
+			public ActionRules getActionsRules() {
 				List<String> res = new ArrayList<String>();
 				for (SimpleAction action:actions){
-					String result = "";
 					for (List<SimpleVariable> currentVariables:getCombination(action.getParameters().size(),objects)){
+						String result = "";
 						//creo una mappa dalle variabili precedenti a quelle nuove
 						Map<SimpleVariable,SimpleVariable> newVar = new HashMap<SimpleVariable, SimpleVariable>();
 						for (int i=0;i<currentVariables.size();i++)
@@ -319,40 +326,41 @@ public class PDDLWorldDescription {
 
 						//creo una mappa dai vecchi predicati a quelli con le variabili correnti
 						Map<SimplePredicate,String> map = new HashMap<SimplePredicate, String>();
-						List<SimplePredicate> usedPredicates = action.getPreconditions().getFormula().getPredicates();
-						for (SimplePredicate p:action.getPreconditions().getPredicates()){
-							String newPred = "";
-							newPred+="p_"+p.getName()+"_v";
-							for (SimpleVariable var:p.variables) newPred+="_"+newVar.get(var).getName();
-							map.put(p,newPred);
-						}
+						if (action.getPreconditions()!=null)
+							for (SimplePredicate p:action.getPreconditions().getPredicates()){
+								String newPred = "";
+								newPred+="p_"+p.getName()+"_v";
+								for (SimpleVariable var:p.variables) newPred+="_"+newVar.get(var).getName();
+								map.put(p,newPred);
+							}
 						for (SimplePredicate p:action.getEffects().getPredicates()){
 							String newPred = "";
 							newPred+="p_"+p.getName()+"_v";
 							for (SimpleVariable var:p.variables) newPred+="_"+newVar.get(var).getName();
 							map.put(p,newPred);
 						}
-						result+=" (";
 						result+=" ( "+action.getName();
 						for(int i=0;i<currentVariables.size();i++) result+=" && var"+i+currentVariables.get(i);
 
 						//inserimento precondizioni
-						result+=" (";
-						result+=action.getPreconditions().getFormula().toStringLTLf(map);
-						result+=" )";
+						if (action.getPreconditions()!=null) {
+							result += " && (";
+							result += action.getPreconditions().getFormula().toStringLTLf(map);
+							result += " )";
+						}
+
 						result+=" ) -> X("; //chiusura parentesi prima parte implicazione
 						result+=action.getEffects().getFormula().toStringLTLf(map);
 						result+=" )";//chiusura parentesi seconda parte implicazione
-						result+=" )";
+						res.add(result);
 					}
-					res.add(result);
 				}
-				return res;
+				return new ActionRules(res);
 			}
 
 			@Override
-			public String getGoalFormula() {
-				return "( "+goal.toStringLTLf(newPredicates)+" )";
+			public GoalRules getGoalRules() {
+				return new GoalRules("( "+goal.toStringLTLf(newPredicates)+" )");
 			}
 
 			@Override
@@ -369,7 +377,17 @@ public class PDDLWorldDescription {
 			public PropositionalSignature getHiddenSet() {
 				return hiddenSet;
 			}
+
+			@Override
+			public PropositionalSignature getPropositionalSignature() {
+				PropositionalSignature sig = new PropositionalSignature();
+				sig.addAll(agentSet);
+				sig.addAll(hiddenSet);
+				sig.addAll(environmentSet);
+				return sig;
+			}
 		};
+		result.initialize();
 		return result;
 	}
 }

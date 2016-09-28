@@ -1,5 +1,6 @@
 package Main;
 
+import AutomatonThings.Mix;
 import Exceptions.NonExistentParameterException;
 import Exceptions.NonExistentPredicateException;
 import Exceptions.RequirementException;
@@ -10,8 +11,8 @@ import PDDLFormulaContainer.PDDLProblem;
 import PDDLFormulaContainer.PDDLWorldDescription;
 import formula.ldlf.LDLfFormula;
 import formula.ltlf.LTLfFormula;
+import main.Main;
 import rationals.Automaton;
-import rationals.transformations.Mix;
 import rationals.transformations.Reducer;
 import utils.AutomatonUtils;
 import utils.ParserUtils;
@@ -20,7 +21,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.List;
 
 import static main.Main.ltlfFormula2Aut;
 
@@ -29,7 +29,8 @@ import static main.Main.ltlfFormula2Aut;
  */
 public class mainInterface {
 	mainInterface(String domainPath, String problemPath) throws IOException, RequirementException, WrongDomainException, NonExistentPredicateException, NonExistentParameterException {
-
+		long timer = System.currentTimeMillis();
+		System.out.println(System.currentTimeMillis());
 		//Tree creation of PDDL's Domain file
 		String domainFile = (new loadResources(domainPath)).getResource();
 		DomainVisit domainVisit = new DomainVisit(domainFile);
@@ -44,78 +45,97 @@ public class mainInterface {
 		System.out.println(world);
 
 		LTLfWorldDescription ltlfWorld = world.toLTLfFormula();
-		System.out.println("ACTION\t"+ltlfWorld.getActionsFormula());
-		System.out.println("AGENT\t"+ltlfWorld.getAgentRuleFormula());
-		System.out.println("GOAL\t"+ltlfWorld.getGoalFormula());
-		System.out.println("INIT\t"+ltlfWorld.getInitFormula());
-		System.out.println("WORLD\t"+ltlfWorld.getWorldRulesFormula());
+		System.out.println("ACTION\t"+ltlfWorld.getActionsRules());
+		System.out.println("AGENT\t"+ltlfWorld.getAgentRule());
+		System.out.println("GOAL\t"+ltlfWorld.getGoalRules());
+		System.out.println("INIT\t"+ltlfWorld.getInitRules());
+		System.out.println("WORLD\t"+ltlfWorld.getWorldRules());
 
-		List<String> formulas = ltlfWorld.getWorldRulesFormula();
+		System.out.print("Generazione formula init - ");
+		LTLfFormula initformula = ParserUtils.parseLTLfFormula(ltlfWorld.getInitRules().getLTLfFormula());
+		LDLfFormula initldlff = initformula.toLDLf();
+		Automaton init = Main.ldlfFormula2Aut(initldlff, null, false, true, false, true, false).getAutomaton();
+		init = new Reducer().transform(init);
+		System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+
+		System.out.print("Generazione formule agent - ");
+		LTLfFormula agentformula = ParserUtils.parseLTLfFormula(ltlfWorld.getAgentRule().getLTLfFormula());
+		LDLfFormula agentldlff = agentformula.toLDLf();
+		Automaton agentRules = Main.ldlfFormula2Aut(agentldlff, null, false, true, false, true, false).getAutomaton();
+		agentRules = new Reducer().transform(agentRules);
+		System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+
+		System.out.println("Generazione formule azioni");
+		Automaton[] actionFormula = new Automaton[ltlfWorld.getActionsRules().size()];
+		for (int i=0;i<ltlfWorld.getActionsRules().size();i++){
+			System.out.print("\tprogress: "+(i+1)+"/"+ltlfWorld.getActionsRules().size()+" - ");
+			LTLfFormula actionForm = ParserUtils.parseLTLfFormula(ltlfWorld.getActionsRules().get(i));
+			LDLfFormula actionldlf = actionForm.toLDLf();
+			actionFormula[i] = Main.ldlfFormula2Aut(actionldlf, null, false, true, false, true, false).getAutomaton();
+			actionFormula[i] = new Reducer().transform(actionFormula[i]);
+			System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+		}
+		System.out.println("Unione delle azioni");
+		for (int i=1;i<actionFormula.length;i++) {
+			System.out.print("\tprogress: "+i+"/"+actionFormula.length+" - ");
+			actionFormula[0] = new Mix().transform(actionFormula[0],actionFormula[i]);
+			System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+		}
+
+		System.out.println("Generazione formule regole");
+		LTLfWorldDescription.WorldRules formulas = ltlfWorld.getWorldRules();
 		Automaton aut[] = new Automaton[formulas.size()];
 		for (int i=0;i<formulas.size();i++){
-			System.out.println("Sto generando l'automa per la formula "+i+": "+formulas.get(i));
-
+			System.out.print("\tprogress: "+(i+1)+"/"+formulas.size()+" - ");
 			LTLfFormula formula = ParserUtils.parseLTLfFormula(formulas.get(i));
 			LDLfFormula ldlff = formula.toLDLf();
 			aut[i] = (ltlfFormula2Aut(formula, null, false, true, false, true, false)).getAutomaton();
-			printAutomaton(aut[i],"output/automaton"+i+".gv");
+			System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
 		}
-		System.out.println("Sto unendo le esclusioni");
-		Automaton exclusionRules = (new Mix()).transform(aut[0],aut[1]);
-		exclusionRules = (new Mix()).transform(exclusionRules,aut[2]);
-		exclusionRules = (new  Mix()).transform(exclusionRules,aut[3]);
-		exclusionRules = (new Reducer()).transform(exclusionRules);
-		AutomatonUtils.printAutomaton(exclusionRules,"output/exclusionRules.gv");
-		System.out.println("Sto unendo le move");
-		Automaton moveAutomaton = (new Mix()).transform(aut[4],aut[5]);
-		moveAutomaton = (new Mix()).transform(moveAutomaton,aut[6]);
-		moveAutomaton = (new Mix()).transform(moveAutomaton,aut[7]);
-		moveAutomaton = (new Reducer()).transform(moveAutomaton);
-		AutomatonUtils.printAutomaton(moveAutomaton,"output/moveRules.gv");
-		System.out.println("Sto unendo move e esclusioni");
-		Automaton moveAndExclusion = (new Mix()).transform(exclusionRules,moveAutomaton);
-		moveAndExclusion = (new Reducer()).transform(moveAndExclusion);
-		AutomatonUtils.printAutomaton(moveAndExclusion,"output/exclusionAndMoveRules.gv");
-		System.out.println("Sto unendo le clean");
-		Automaton cleanAutomaton = (new Mix()).transform(aut[8],aut[9]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[10]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[11]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[12]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[13]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[14]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[15]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[16]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[17]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[18]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		cleanAutomaton = (new Mix()).transform(cleanAutomaton,aut[19]);
-		cleanAutomaton = (new Reducer()).transform(cleanAutomaton);
-		AutomatonUtils.printAutomaton(cleanAutomaton,"output/cleanRules.gv");
-		System.out.println("Sto unendo clean e esclusioni");
-		Automaton cleanAndExclusion = (new Mix()).transform(exclusionRules,cleanAutomaton);
-		cleanAndExclusion = (new Reducer()).transform(cleanAndExclusion);
-		AutomatonUtils.printAutomaton(cleanAndExclusion,"output/exclusionAndCleanRules.gv");
-		System.out.println("Sto unendo l'automa completo");
-		Automaton completeAutomaton = (new Mix()).transform(moveAndExclusion,cleanAndExclusion);
-		completeAutomaton = (new Reducer()).transform(completeAutomaton);
-		AutomatonUtils.printAutomaton(completeAutomaton,"output/exclusionCompleteRules.gv");
+		Automaton completeAutomaton = aut[0];
+		for (int i=1;i<aut.length;i++){
+			completeAutomaton = new Mix().transform(completeAutomaton,aut[i]);
+			completeAutomaton = new Reducer().transform(completeAutomaton);
+		}
+
+		System.out.print("Sto unendo le regole con init - ");
+		Automaton FinalAutomaton = new Mix().transform(completeAutomaton,init);
+		FinalAutomaton = new Reducer().transform(FinalAutomaton);
+		System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+
+		System.out.print("Sto unendo anche le agentrules - ");
+		FinalAutomaton = new Mix().transform(FinalAutomaton,agentRules);
+		FinalAutomaton = new Reducer().transform(FinalAutomaton);
+		System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+
+		System.out.print("Infine unisco le azioni - ");
+		FinalAutomaton = new Mix().transform(actionFormula[0],FinalAutomaton);
+		System.out.println(((float)(System.currentTimeMillis()-timer))/1000);
+
+		System.out.println("ALPHABET : "+FinalAutomaton.alphabet());
+		System.out.println("N° STATES: "+FinalAutomaton.states().size());
+		System.out.println("INITIALS : "+FinalAutomaton.initials());
+		System.out.println("TERMINALS: "+FinalAutomaton.terminals());
+		printAutomaton(FinalAutomaton,"output/FinalAutomaton.gv");
+
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream("output/prova.txt");
+			PrintStream ps = new PrintStream(fos);
+			ps.println(AutomatonUtils.toDot(FinalAutomaton));
+			ps.flush();
+			ps.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args){
-		try{new mainInterface("PDDLdoubleMurphyDomainFormula.txt", "PDDLdoubleMurphyProblemFormula.txt");}
+		try{new mainInterface("PDDLdoubleMurphyDomainFormula2.txt", "PDDLdoubleMurphyProblemFormula2.txt");}
 		catch (Exception e){e.printStackTrace();}
 	}
 
-	public void printAutomaton(Automaton automaton, String path){
+	public static void printAutomaton(Automaton automaton, String path){
 		FileOutputStream fos;
 		try {
 			fos = new FileOutputStream(path);

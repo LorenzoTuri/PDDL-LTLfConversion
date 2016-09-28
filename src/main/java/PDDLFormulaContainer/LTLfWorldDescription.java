@@ -8,32 +8,118 @@ import java.util.List;
  * Created by loren on 14/09/2016.
  */
 public abstract class LTLfWorldDescription {
-	public abstract String getInitFormula();
-	public abstract List<String> getWorldRulesFormula();
-	public abstract String getAgentRuleFormula();
-	public abstract List<String> getActionsFormula();
-	public abstract String getGoalFormula();
+	public abstract InitRules getInitRules();
+	public abstract WorldRules getWorldRules();
+	public abstract AgentRules getAgentRule();
+	public abstract ActionRules getActionsRules();
+	public abstract GoalRules getGoalRules();
+
+	public abstract void initialize();
 
 	public abstract PropositionalSignature getAgentSet();
 	public abstract PropositionalSignature getEnvironmentSet();
 	public abstract PropositionalSignature getHiddenSet();
 
+	public abstract PropositionalSignature getPropositionalSignature();
+
 	@Override
 	public String toString() {
 		/*
-		( WORLDRULES ) -> (
-			( INITRULES ) -> X(
-				( G( WORLDRULES && AGENTRULES ) && G(ACTIONSFORMULA) ) -> F( GOALFORMULA )
-			)
+		INIT -> (
+			(
+				(WORLDRULES && AGENTRULES) -> ACTIONS
+			) -> F(GOAL)
 		)
+		INIT && X(
+			(REGOLEMONDO && AGENTRULES) && ACTIONS
+		)
+		INIT = (A && B && ...)
+		WORLDRULES = (G(A) && G(B) && ...)
+		AGENTRULES = (G(A) && G(B) && ...)
+		ACTIONS = (G(A->X(B)) && G(C->X(D)) && ...)
+		GOAL = (A && B && ...
 		 */
 		String result = "";
-		result+= "( "+getWorldRulesFormula()+" ) -> ( ";
-		result+= "\n\t( "+getInitFormula()+") -> X ( ";
-		result+= "\n\t\tG ( "+getWorldRulesFormula()+" && "+getAgentRuleFormula()+" ) && G ( "+getActionsFormula()+" ) ";
-		result+= "\n\t\t) -> F ("+getGoalFormula()+" ) ";
-		result+= "\n\t) ";
-		result+= "\n)";
+		result+="Init:"+getInitRules()+"\n";
+		result+="World: "+getWorldRules()+"\n";
+		result+="Agent: "+getAgentRule()+"\n";
+		result+="Goal: "+getGoalRules()+"\n";
+		result+="Action: "+getActionsRules()+"\n";
 		return result;
+	}
+
+	public class InitRules implements formulaInterface{
+		String string = "";
+		InitRules(String s){ string = s;}
+		public String getLTLfFormula(){
+			return string;
+		}
+		public String toString(){
+			return getLTLfFormula();
+		}
+	}
+
+	public class WorldRules implements formulaInterface{
+		public int size() { return strings.size();}
+		public String get(int i){ return strings.get(i);}
+		List<String> strings;
+		WorldRules(List<String> strings){ this.strings = strings;}
+		public String getLTLfFormula(){
+			if (strings.size() == 0) return "";
+			String result = "("+strings.get(0)+")";
+			for (int i=1;i<strings.size();i++) result+=" && ("+strings.get(i)+")";
+			return result;
+		}
+		public String toString(){
+			return getLTLfFormula();
+		}
+	}
+
+	public class AgentRules implements formulaInterface{
+		String string = "";
+		public AgentRules(String s) {
+			string = s;
+		}
+		public String getLTLfFormula(){
+			return string;
+		}
+		public String toString(){
+			return getLTLfFormula();
+		}
+	}
+
+	public class ActionRules implements formulaInterface{
+		public int size() { return strings.size();}
+		public String get(int i){ return strings.get(i);}
+		List<String> strings;
+		ActionRules(List<String> strings){
+			this.strings = strings;
+		}
+		public String getLTLfFormula(){
+			if (strings.size() == 0) return "";
+			String result = "("+strings.get(0)+")";
+			for (int i=1;i<strings.size();i++) result+=" && ("+strings.get(i)+")";
+			return result;
+		}
+		public String toString(){
+			return getLTLfFormula();
+		}
+	}
+
+	public class GoalRules implements formulaInterface{
+		String string;
+		public GoalRules(String s){
+			this.string = s;
+		}
+		public String getLTLfFormula(){
+			return string;
+		}
+		public String toString(){
+			return getLTLfFormula();
+		}
+	}
+
+	private abstract interface formulaInterface{
+		public String getLTLfFormula();
 	}
 }

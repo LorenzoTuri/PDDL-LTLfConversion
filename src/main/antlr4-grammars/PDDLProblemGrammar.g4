@@ -54,7 +54,7 @@ formula: predicate
 	| LB FORALL LB SIMPLENAME+ RB formula RB
 	;
 
-predicate: LB name ('?'?SIMPLENAME)+ RB;
+predicate: LB name ('?'?SIMPLENAME)* RB;
 name: SIMPLENAME;
 
 lengthspecserial: LB SERIALTAG NUMBER RB;

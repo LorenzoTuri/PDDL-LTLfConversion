@@ -26,7 +26,7 @@ formulapredicates
 	: LB PREDICATETAG supportTagPredicates+ RB
 	;
 supportTagPredicates :
-	(LB SIMPLENAME (variables)+ RB)
+	(LB SIMPLENAME (variables)* RB)
 	;
 /*formulaconstraints
 	: LB CONSTRAINTTAG constraints RB
@@ -53,7 +53,7 @@ effectsdefinition
 	;
 
 predicate
-	: SIMPLENAME (variables)+
+	: SIMPLENAME (variables)*
 	;
 variables
 	: VARIABLE VARIABLETYPE?
@@ -74,8 +74,7 @@ condition //TODO: rimettere a posto le condizioni, ora sono sbagliate
 	| CONDITION_HOLD_AFTER NUMBER
 	;*/
 formula
-	: SIMPLENAME
-	| LB predicate RB
+	: LB predicate RB
 	| LB formula RB
 	| LOGIC_NOT formula
 	| LOGIC_EQUALS formula formula

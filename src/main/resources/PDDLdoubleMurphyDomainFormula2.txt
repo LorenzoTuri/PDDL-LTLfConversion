@@ -1,0 +1,50 @@
+(define
+(domain double-murphy)
+(:predicates
+	(isona)
+	(dirtya)
+	(dirtyb)
+)
+(:action movetoa
+	:precondition ((isona))
+	:effect (and 
+		(not(isona))
+		(or (dirtyb) (not(dirtyb)))
+	)
+)
+(:action movetob
+	:precondition (not(isona))
+	:effect (and 
+		(isona)
+		(or (dirtya) (not(dirtya)))
+	)
+)
+(:action cleana1
+	:precondition (and 
+		(isona) 
+		(dirtya)
+	)
+	:effect (not(dirtya))
+)
+(:action cleana2
+	:precondition (and 
+		(isona) 
+		(not(dirtya))
+	)
+	:effect ((dirtya))
+)
+(:action cleanb1
+	:precondition (and 
+		(not(isona)) 
+		(dirtyb)
+	)
+	:effect (not(dirtyb))
+)
+(:action cleanb2
+	:precondition (and 
+		(not(isona)) 
+		(not(dirtyb))
+	)
+	:effect ((dirtyb))
+)
+)
